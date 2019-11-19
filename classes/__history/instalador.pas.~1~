@@ -3,9 +3,8 @@ unit instalador;
 interface
 
 type
-  TInstalador = class
 
-  private
+  TInstalador = class
 
   public
     procedure configurarHD;
