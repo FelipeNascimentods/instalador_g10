@@ -8,7 +8,7 @@ type
   TFuncoes = class
 
   private
-
+    procedure criarBat;
   public
     procedure configurarHD;
     procedure configurarDB;
