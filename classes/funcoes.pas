@@ -8,7 +8,7 @@ type
   TFuncoes = class
 
   private
-
+    procedure criarBat;
   public
     procedure configurarHD;
     procedure configurarDB;
@@ -22,8 +22,10 @@ implementation
 { TInstalador }
 
 procedure TFuncoes.configurarDB;
+var
+  a: string;
 begin
-
+  a := 'teste';
 end;
 
 procedure TFuncoes.configurarHD;
