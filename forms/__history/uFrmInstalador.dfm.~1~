@@ -22,15 +22,15 @@ object frmInstalador: TfrmInstalador
     Height = 50
     Align = alBottom
     TabOrder = 0
-    object btnInstalar: TSpeedButton
+    object SpeedButton1: TSpeedButton
       Left = 398
       Top = 7
       Width = 125
       Height = 38
       Caption = 'Instalar'
-      OnClick = btnInstalarClick
+      OnClick = SpeedButton1Click
     end
-    object barraDeProgresso: TGauge
+    object Gauge1: TGauge
       Left = 3
       Top = 7
       Width = 387
@@ -46,7 +46,7 @@ object frmInstalador: TfrmInstalador
     Align = alLeft
     TabOrder = 1
     ExplicitHeight = 400
-    object imgLogo: TImage
+    object Image1: TImage
       Left = 16
       Top = 8
       Width = 131

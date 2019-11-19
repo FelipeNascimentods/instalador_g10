@@ -12,28 +12,22 @@ type
     pnBot: TPanel;
     pnLeft: TPanel;
     pnClient: TPanel;
-    imgLogo: TImage;
+    Image1: TImage;
     lblTitulo: TLabel;
     lblTexto: TLabel;
-    btnInstalar: TSpeedButton;
+    SpeedButton1: TSpeedButton;
     RadioButton1: TRadioButton;
     RadioButton2: TRadioButton;
     RadioButton3: TRadioButton;
     RadioButton4: TRadioButton;
     RadioButton5: TRadioButton;
-    barraDeProgresso: TGauge;
-    procedure btnInstalarClick(Sender: TObject);
+    Gauge1: TGauge;
+    procedure SpeedButton1Click(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
     procedure instalar;
-
-    procedure configurarHD;
-    procedure configurarDB;
-    procedure moverArquivos;
-    procedure instalarProgramas;
-    procedure criarAtalhos;
   end;
 
 var
@@ -43,38 +37,12 @@ implementation
 
 {$R *.dfm}
 
-procedure TfrmInstalador.configurarDB;
-begin
-
-end;
-
-procedure TfrmInstalador.configurarHD;
-begin
-
-end;
-
-procedure TfrmInstalador.criarAtalhos;
-begin
-
-end;
-
 procedure TfrmInstalador.instalar;
 begin
-  {Main}
-
+  ShowMessage('foi');
 end;
 
-procedure TfrmInstalador.instalarProgramas;
-begin
-
-end;
-
-procedure TfrmInstalador.moverArquivos;
-begin
-
-end;
-
-procedure TfrmInstalador.btnInstalarClick(Sender: TObject);
+procedure TfrmInstalador.SpeedButton1Click(Sender: TObject);
 begin
   instalar;
 end;
