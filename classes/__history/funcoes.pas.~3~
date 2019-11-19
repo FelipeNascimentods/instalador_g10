@@ -2,8 +2,6 @@ unit funcoes;
 
 interface
 
-uses ShellAPI;
-
 type
   TFuncoes = class
 
