@@ -24,16 +24,8 @@ type
     barraDeProgresso: TGauge;
     procedure btnInstalarClick(Sender: TObject);
   private
-    { Private declarations }
   public
-    { Public declarations }
     procedure instalar;
-
-    procedure configurarHD;
-    procedure configurarDB;
-    procedure moverArquivos;
-    procedure instalarProgramas;
-    procedure criarAtalhos;
   end;
 
 var
@@ -42,34 +34,7 @@ var
 implementation
 
 {$R *.dfm}
-
-procedure TfrmInstalador.configurarDB;
-begin
-
-end;
-
-procedure TfrmInstalador.configurarHD;
-begin
-
-end;
-
-procedure TfrmInstalador.criarAtalhos;
-begin
-
-end;
-
 procedure TfrmInstalador.instalar;
-begin
-  {Main}
-
-end;
-
-procedure TfrmInstalador.instalarProgramas;
-begin
-
-end;
-
-procedure TfrmInstalador.moverArquivos;
 begin
 
 end;
@@ -78,5 +43,4 @@ procedure TfrmInstalador.btnInstalarClick(Sender: TObject);
 begin
   instalar;
 end;
-
 end.

@@ -5,8 +5,10 @@
     <Transaction>2019/09/03 11:39:18.000.725,=C:\Users\Desenvolvimento01\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2019/09/16 11:11:45.000.589,=C:\Users\Desenvolvimento01\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2019/11/19 11:26:09.355,=C:\Users\Desenvolvimento01\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
-    <Transaction>2019/11/19 11:43:27.844,C:\Users\Desenvolvimento01\Documents\GitHub\instaldor_g10\forms\uFrmInstalador.dfm=C:\Users\Desenvolvimento01\Documents\Embarcadero\Studio\Projects\Unit2.dfm</Transaction>
     <Transaction>2019/11/19 11:43:27.844,C:\Users\Desenvolvimento01\Documents\GitHub\instaldor_g10\forms\uFrmInstalador.pas=C:\Users\Desenvolvimento01\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>2019/11/19 11:43:27.844,C:\Users\Desenvolvimento01\Documents\GitHub\instaldor_g10\forms\uFrmInstalador.dfm=C:\Users\Desenvolvimento01\Documents\Embarcadero\Studio\Projects\Unit2.dfm</Transaction>
     <Transaction>2019/11/19 11:43:40.584,C:\Users\Desenvolvimento01\Documents\GitHub\instaldor_g10\instalador.dproj=C:\Users\Desenvolvimento01\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2019/11/19 14:36:43.667,=C:\Users\Desenvolvimento01\Documents\GitHub\instaldor_g10\Unit1.pas</Transaction>
+    <Transaction>2019/11/19 14:39:34.177,C:\Users\Desenvolvimento01\Documents\GitHub\instaldor_g10\classes\instalador.pas=C:\Users\Desenvolvimento01\Documents\GitHub\instaldor_g10\Unit1.pas</Transaction>
   </Transactions>
 </BorlandProject>
