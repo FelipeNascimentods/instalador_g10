@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Samples.Gauges, Vcl.StdCtrls,
-  Vcl.Buttons, Vcl.ExtCtrls, Vcl.Imaging.pngimage, funcoes;
+  Vcl.Buttons, Vcl.ExtCtrls, Vcl.Imaging.pngimage, funcoes, shellapi;
 
 type
   TfrmInstalador = class(TForm)
@@ -22,7 +22,9 @@ type
     RadioButton4: TRadioButton;
     RadioButton5: TRadioButton;
     barraDeProgresso: TGauge;
+    btnTeste: TButton;
     procedure btnInstalarClick(Sender: TObject);
+    procedure btnTesteClick(Sender: TObject);
   private
     funcoes: TFuncoes;
   public
@@ -36,9 +38,14 @@ implementation
 
 {$R *.dfm}
 
+procedure TfrmInstalador.btnTesteClick(Sender: TObject);
+begin
+  funcoes.instalarProgramas(barraDeProgresso);
+end;
+
 procedure TfrmInstalador.instalar;
 begin
-  //instalador.configurarHD;
+
 end;
 
 procedure TfrmInstalador.btnInstalarClick(Sender: TObject);

@@ -45,7 +45,6 @@ object frmInstalador: TfrmInstalador
     Height = 456
     Align = alLeft
     TabOrder = 1
-    ExplicitHeight = 400
     object imgLogo: TImage
       Left = 16
       Top = 8
@@ -168,9 +167,6 @@ object frmInstalador: TfrmInstalador
     Height = 456
     Align = alClient
     TabOrder = 2
-    ExplicitLeft = 168
-    ExplicitWidth = 328
-    ExplicitHeight = 352
     object lblTitulo: TLabel
       Left = 206
       Top = 8
@@ -198,6 +194,15 @@ object frmInstalador: TfrmInstalador
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
+    end
+    object btnTeste: TButton
+      Left = 184
+      Top = 304
+      Width = 75
+      Height = 25
+      Caption = 'Teste'
+      TabOrder = 0
+      OnClick = btnTesteClick
     end
   end
 end

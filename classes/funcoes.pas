@@ -2,18 +2,19 @@ unit funcoes;
 
 interface
 
-uses ShellAPI;
+uses ShellAPI, Winapi.Windows, Vcl.Controls, Vcl.Forms, Vcl.Samples.Gauges;
 
 type
   TFuncoes = class
 
   private
     procedure criarBat;
+    function ExecutarEEsperar(NomeArquivo : String) : Boolean;
   public
     procedure configurarHD;
     procedure configurarDB;
     procedure moverArquivos;
-    procedure instalarProgramas;
+    procedure instalarProgramas(gauge: TGauge);
     procedure criarAtalhos;
   end;
 
@@ -99,13 +100,57 @@ begin
     //execBat;
 end;
 
-procedure TFuncoes.instalarProgramas;
+procedure TFuncoes.instalarProgramas(gauge: TGauge);
+var
+  path, programa: string;
 begin
+  gauge.Progress := 0;
+  gauge.MaxValue := 3;
 
+  path := 'D:\INSTALADOR\G10 Sistemas [Versão 06 - 2019] - Postgres 11\setup\';
+
+  programa := 'PgManagerFullSetup.exe';
+  ExecutarEEsperar(path+programa);
+  gauge.AddProgress(1);
+
+  programa := 'AnyDesk.exe';
+  ExecutarEEsperar(path+programa);
+  gauge.AddProgress(1);
+
+  programa := 'FileZilla_3.16.1_win64-setup.exe';
+  ExecutarEEsperar(path+programa);
+  gauge.AddProgress(1);
 end;
 
 procedure TFuncoes.moverArquivos;
 begin
 
 end;
+
+function TFuncoes.ExecutarEEsperar(NomeArquivo : String) : Boolean;
+var Sh: TShellExecuteInfo;
+  CodigoSaida: DWORD;
+begin
+  FillChar(Sh, SizeOf(Sh), 0) ;
+  Sh.cbSize := SizeOf(TShellExecuteInfo) ;
+  with Sh do
+    begin
+      fMask := SEE_MASK_NOCLOSEPROCESS;
+      Wnd := Application.Handle;
+      lpVerb := nil;
+      lpFile := PChar(NomeArquivo);
+      nShow := SW_SHOWNORMAL;
+    end;
+    if ShellExecuteEx(@Sh) then
+    begin
+    repeat
+      Application.ProcessMessages;
+      GetExitCodeProcess(Sh.hProcess, CodigoSaida) ;
+    until not(CodigoSaida = STILL_ACTIVE);
+    Result := True;
+  end
+  else
+  Result := False;
+end;
+
 end.
