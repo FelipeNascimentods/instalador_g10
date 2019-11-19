@@ -33,7 +33,7 @@ end;
 
 procedure TFuncoes.criarAtalhos;
 begin
-  //ok
+
 end;
 
 procedure TFuncoes.instalarProgramas;
