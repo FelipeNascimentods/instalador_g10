@@ -102,7 +102,7 @@
             <Form>frmInstalador</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="classes\instalador.pas"/>
+        <DCCReference Include="classes\funcoes.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
