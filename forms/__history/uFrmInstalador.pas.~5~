@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Samples.Gauges, Vcl.StdCtrls,
-  Vcl.Buttons, Vcl.ExtCtrls, Vcl.Imaging.pngimage, funcoes;
+  Vcl.Buttons, Vcl.ExtCtrls, Vcl.Imaging.pngimage;
 
 type
   TfrmInstalador = class(TForm)
@@ -24,7 +24,7 @@ type
     barraDeProgresso: TGauge;
     procedure btnInstalarClick(Sender: TObject);
   private
-    funcoes: TFuncoes;
+
   public
     procedure instalar;
   end;
