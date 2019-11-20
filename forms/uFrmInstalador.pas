@@ -58,7 +58,6 @@ begin
   validarCliente := TValidarCliente.Create(self);
 
   frmInstalador.Visible := false;
-<<<<<<< HEAD
 
   validarCliente.ShowModal;
   if validarCliente.getVerificacao then
@@ -66,22 +65,16 @@ begin
   else
     close;
 
-=======
   mLog.Clear;
   validarCliente.ShowModal;
 
   frmInstalador.Visible := true;
->>>>>>> ef08eb211df3e5aca777b76d7a38ae9b9d5ab726
 end;
 
 procedure TfrmInstalador.instalar;
 begin
-<<<<<<< HEAD
-  funcoes.configurarHD;
-=======
   funcoes := TFuncoes.Create;
   funcoes.configurarHD(mLog);
->>>>>>> ef08eb211df3e5aca777b76d7a38ae9b9d5ab726
   //funcoes.moverArquivos;
   funcoes.configurarDB;
   funcoes.criarAtalhos;

@@ -51,7 +51,6 @@ begin
     if funcoes.validarInstalacao(edtCNPJ.Text, edtCPF.Text, edtCodigo.Text) then
     begin
       verificacao := true;
-      close;
     end;
   except
     on E: Exception do
