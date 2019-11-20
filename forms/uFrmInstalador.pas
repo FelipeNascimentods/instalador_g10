@@ -55,6 +55,7 @@ begin
   funcoes := TFuncoes.Create;
   funcoes.configurarHD;
   //funcoes.moverArquivos;
+  funcoes.configurarDB;
   funcoes.criarAtalhos;
 end;
 

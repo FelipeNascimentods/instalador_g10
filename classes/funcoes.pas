@@ -10,7 +10,8 @@ type
 
   private
     daoInstalador: TDaoInstalador;
-
+    procedure configurarPostgresql;
+    procedure execConfigPostgresql;
     procedure instalarPostegresql;
     procedure criarBat;
     function ExecutarEEsperar(NomeArquivo : String) : Boolean;
@@ -29,22 +30,32 @@ implementation
 
 { TInstalador }
 
+uses uFrmInstalador;
+
 procedure TFuncoes.instalarPostegresql;
 var
   sCaminho, sExe: string;
 begin
+  try
   sCaminho := 'E:\Desenvolvimento\Componentes\INSTALADOR\G10 '+
-  'Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\Utilitarios\';
+              'Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\Utilitarios\';
 
   sExe := 'postgresql-11.3-1-windows-x64.exe';
 
-  if not ExecutarEEsperar(sCaminho+sExe) then
+  frmInstalador.Visible := false;
+
+  ExecutarEEsperar(sCaminho+sExe);
+  except
+    frmInstalador.Visible := true;
     Application.MessageBox('Não foi possível instalar o ''postgresql-11.3-1-windows-x64'' ', 'ERRO!', MB_ICONERROR + MB_OK);
+  end;
+  frmInstalador.Visible := true;
 end;
 
 procedure TFuncoes.configurarDB;
 begin
-
+  instalarPostegresql;
+  execConfigPostgresql;
 end;
 
 procedure TFuncoes.configurarHD;
@@ -71,6 +82,20 @@ begin
     end;
   end else
     raise Exception.Create('Script não criado!');
+end;
+
+procedure TFuncoes.configurarPostgresql;
+var
+  bat : TextFile;
+begin
+  AssignFile(bat, 'E:\configPostgresql.bat');
+  Rewrite(bat);
+  Writeln(bat, 'set PGUSER=postgres                                          ');
+  Writeln(bat, 'set PGPASSWORD=info$g10112                                   ');
+  Writeln(bat, 'C:\Program Files\PostgreSQL\11\bin\pg_restore.exe --host localhost   '+
+  '--port 5432 --username postgres --dbname db_sgc --verbose "E:\Desenvolvimento\Componentes\INSTALADOR\G10 Sistemas [Versão 06 - 2019] - Postgres 11\setup\db_sgc.backup"');
+
+  CloseFile(bat);
 end;
 
 procedure TFuncoes.criarAtalhos;
@@ -137,6 +162,18 @@ begin
   Write(F,   'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                  ');
 
   CloseFile(F);
+end;
+
+procedure TFuncoes.execConfigPostgresql;
+begin
+  try
+    configurarPostgresql;
+
+    if FileExists('E:\configPostgresql.bat') then
+      ExecutarEEsperar('E:\configPostgresql.bat');
+  finally
+    DeleteFile('E:\configPostgresql.bat');
+  end;
 end;
 
 procedure TFuncoes.CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
