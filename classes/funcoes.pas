@@ -10,7 +10,6 @@ type
 
   private
     procedure criarBat;
-
     function ExecutarEEsperar(NomeArquivo : String) : Boolean;
 
     procedure CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
@@ -20,7 +19,10 @@ type
     procedure moverArquivos;
     procedure instalarProgramas(gauge: TGauge);
     procedure criarAtalhos;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3c2f8433435f3839c2ef7fd600186f156fc174a3
   end;
 
 var
@@ -40,7 +42,7 @@ end;
 
 procedure TFuncoes.configurarHD;
 begin
-
+  criarBat;
 end;
 
 procedure TFuncoes.criarAtalhos;
@@ -48,6 +50,65 @@ var
   path : string;
 begin
     CreateShortcut('C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV\OS.exe','','C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV', 'OS','');
+end;
+
+procedure TFuncoes.criarBat;
+var
+  F : TextFile;
+begin
+  AssignFile(F, 'C:\script.bat');
+  Rewrite(F);
+  Writeln(F, 'REM V0.2                                                                            ');
+  Writeln(F, '@echo off                                                                           ');
+  Writeln(F, 'cls                                                                                 ');
+  Writeln(F, 'SET disco=0                                                                         ');
+  Writeln(F, 'SET particao=1                                                                      ');
+  Writeln(F, 'echo Testando Disco: %disco% .Partição: %particao%                                  ');
+  Writeln(F, ':construction                                                                       ');
+  Writeln(F, 'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                  ');
+  Writeln(F, 'echo select disk %disco% > C:\scriptdisk.txt                                        ');
+  Writeln(F, 'echo select partition %particao% >> C:\scriptdisk.txt                               ');
+  Writeln(F, 'echo shrink desired=300 minimum=300 >> C:\scriptdisk.txt                            ');
+  Writeln(F, 'echo create partition primary size=300 >> C:\scriptdisk.txt                         ');
+  Writeln(F, 'echo assign letter=X >> C:\scriptdisk.txt                                           ');
+  Writeln(F, 'echo format fs=ntfs label="G10DB" quick >> C:\scriptdisk.txt                        ');
+  Writeln(F, 'echo exit >> C:\scriptdisk.txt                                                      ');
+  Writeln(F, 'if not exist X:\ (                                                                  ');
+  Writeln(F, ':particao                                                                           ');
+  Writeln(F, 'pushd C:\                                                                           ');
+  Writeln(F, 'diskpart /s C:\scriptdisk.txt                                                       ');
+  Writeln(F, 'echo ESSE AQUI! %errorlevel%                                                        ');
+  Writeln(F, 'if errorlevel == 0 (                                                                ');
+  Writeln(F, 'goto okz                                                                            ');
+  Writeln(F, ') else (                                                                            ');
+  Writeln(F, 'SET /a particao += 1                                                                ');
+  Writeln(F, 'if %particao% GTR 5 goto particaoERROR                                              ');
+  Writeln(F, 'echo TESTANTO PARTICAO %particao%                                                   ');
+  Writeln(F, 'goto construction                                                                   ');
+  Writeln(F, ')                                                                                   ');
+  Writeln(F, ':particaoERROR                                                                      ');
+  Writeln(F, 'echo NAO FOI POSSIVEL ENCONTRAR UMA PARTICAO UTILIZAVEL NO DISCO %disco%            ');
+  Writeln(F, 'SET /a disco += 1                                                                   ');
+  Writeln(F, 'SET /a particao = 1                                                                 ');
+  Writeln(F, 'REM ## VERIFICA SE O DISCO JA É MAIOR QUE 3, SE FOR, NAO ENVIA PARA contruction e   ');
+  Writeln(F, 'REM SEGUE COM O SCRIPT. GERANDO O ARQUIVO particaoERRO E SAINDO DO PROGRAMA ##      ');
+  Writeln(F, 'if %disco% LEQ 3 goto construction                                                  ');
+  Writeln(F, 'echo ERRO > C:\particaoERRO.txt                                                     ');
+  Writeln(F, 'goto fim                                                                            ');
+  Writeln(F, ':okz                                                                                ');
+  Writeln(F, 'echo PARTICAO CRIADA COM SUCESSO.                                                   ');
+  Writeln(F, 'echo OK > C:\particaoOK.txt                                                         ');
+  Writeln(F, 'goto fim                                                                            ');
+  Writeln(F, ') else (                                                                            ');
+  Writeln(F, 'echo JA EXISTE A PARTICAO G:                                                        ');
+  Writeln(F, 'echo.                                                                               ');
+  Writeln(F, 'echo EXISTEG > C:\particaoERROG.txt                                                 ');
+  Writeln(F, ')                                                                                   ');
+  Writeln(F, ':fim                                                                                ');
+  Writeln(F, 'echo CONCLUIDO!                                                                     ');
+  Write(F,   'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                    ');
+
+  CloseFile(F);
 end;
 
 procedure TFuncoes.CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
@@ -77,67 +138,6 @@ begin
 
   MyPFile.Save(PWChar (WFileName), False);
   MyReg.Free;
-end;
-
-procedure TFuncoes.criarBat;
-var
-  F : TextFile;
-begin
-  AssignFile(F, 'C:\script.bat' );
-  Rewrite(F);
-  Write(F, 'REM V0.2'+ #13+
-           '@echo off'+ #13+
-           'cls'+ #13+
-           'SET disco=0'+ #13+
-           'SET particao=1'+ #13+
-           'echo Testando Disco: %disco% .Partição: %particao%'+ #13+
-           ':construction'+ #13+
-           'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt'+ #13+
-           'echo select disk %disco% > C:\scriptdisk.txt'+ #13+
-           'echo select partition %particao% >> C:\scriptdisk.txt'+ #13+
-           'echo shrink desired=300 minimum=300 >> C:\scriptdisk.txt'+ #13+
-           'echo create partition primary size=300 >> C:\scriptdisk.txt'+ #13+
-           'echo assign letter=X >> C:\scriptdisk.txt'+ #13+
-           'echo format fs=ntfs label="G10DB" quick >> C:\scriptdisk.txt'+ #13+
-           'echo exit >> C:\scriptdisk.txt'+ #13+
-           'if not exist X:\ ('+ #13+
-           ':particao'+ #13+
-           'pushd C:\'+ #13+
-           'diskpart /s C:\scriptdisk.txt'+ #13+
-           'echo ESSE AQUI! %errorlevel%'+ #13+
-           'if errorlevel == 0 ('+ #13+
-           'goto okz'+ #13+
-           ') else ('+ #13+
-           'SET /a particao += 1'+ #13+
-           'if %particao% GTR 5 goto particaoERROR'+ #13+
-           'echo TESTANTO PARTICAO %particao%'+ #13+
-           'goto construction'+ #13+
-           ')'+ #13+
-           ':particaoERROR'+ #13+
-           'echo NAO FOI POSSIVEL ENCONTRAR UMA PARTICAO UTILIZAVEL NO DISCO %disco%'+ #13+
-           'SET /a disco += 1'+ #13+
-           'SET /a particao = 1'+ #13+
-           'REM ## VERIFICA SE O DISCO JA É MAIOR QUE 3, SE FOR, NAO ENVIA PARA contruction e'+ #13+
-           'REM SEGUE COM O SCRIPT. GERANDO O ARQUIVO particaoERRO E SAINDO DO PROGRAMA ##'+ #13+
-           'if %disco% LEQ 3 goto construction'+ #13+
-           'echo ERRO > C:\particaoERRO.txt'+ #13+
-           'goto fim'+ #13+
-           ':okz'+ #13+
-           'echo PARTICAO CRIADA COM SUCESSO.'+ #13+
-           'echo OK > C:\particaoOK.txt'+ #13+
-           'goto fim'+ #13+
-           ') else ('+ #13+
-           'echo JA EXISTE A PARTICAO G:'+ #13+
-           'echo.'+ #13+
-           'echo EXISTEG > C:\particaoERROG.txt'+ #13+
-           ')'+ #13+
-           ':fim'+ #13+
-           'echo CONCLUIDO!'+ #13+
-           'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt');
-
-  CloseFile(F);
-  //if FileExists('C:\script.bat') then
-    //execBat;
 end;
 
 procedure TFuncoes.instalarProgramas(gauge: TGauge);
