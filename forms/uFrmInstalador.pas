@@ -61,14 +61,13 @@ begin
 
   validarCliente.ShowModal;
   if validarCliente.getVerificacao then
-    frmInstalador.Visible := true
+  begin
+    frmInstalador.Visible := true;
+    mLog.Clear;
+  end
   else
     close;
 
-  mLog.Clear;
-  validarCliente.ShowModal;
-
-  frmInstalador.Visible := true;
 end;
 
 procedure TfrmInstalador.instalar;
