@@ -1,0 +1,31 @@
+unit uFrmValidarCliente;
+
+interface
+
+uses Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Forms,
+  Vcl.Controls, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls;
+
+type
+  TValidarCliente = class(TForm)
+    lblCNPJ: TLabel;
+    Password: TEdit;
+    OKBtn: TButton;
+    CancelBtn: TButton;
+    pnClient: TPanel;
+    Edit1: TEdit;
+    lblCodigo: TLabel;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ValidarCliente: TValidarCliente;
+
+implementation
+
+{$R *.dfm}
+
+end.
+ 

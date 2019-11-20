@@ -270,8 +270,13 @@ begin
     {if not daoInstalador.getIdentificador(StrToInt(identificador)) then
       raise Exception.Create('Cliente não validado');
 
+<<<<<<< HEAD
+    if not daoInstalador.getIdentificador(StrToInt(tecnico)) then
+      raise Exception.Create('Técnico não validado');
+=======
     if not daoInstalador.getTecnico(StrToInt(tecnico)) then
       raise Exception.Create('Técnico não validado');   }
+>>>>>>> 4b465fa7668527fa6f6b440aa7049d3d1419dd24
 
     if not (codigo = StrToInt(cod)) then
       raise Exception.Create('Código de verificação incorreto!');
