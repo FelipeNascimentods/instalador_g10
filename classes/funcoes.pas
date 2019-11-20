@@ -19,14 +19,9 @@ type
     procedure moverArquivos;
     procedure instalarProgramas(gauge: TGauge);
     procedure criarAtalhos;
-<<<<<<< HEAD
-
-=======
->>>>>>> 3c2f8433435f3839c2ef7fd600186f156fc174a3
   end;
 
 var
-
   DirDesktop: String;
 
 implementation
