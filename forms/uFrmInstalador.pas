@@ -38,7 +38,7 @@ implementation
 
 procedure TfrmInstalador.instalar;
 begin
-
+  funcoes.criarBat;
 end;
 
 procedure TfrmInstalador.btnInstalarClick(Sender: TObject);
