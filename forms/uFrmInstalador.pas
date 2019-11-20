@@ -38,7 +38,8 @@ implementation
 
 procedure TfrmInstalador.instalar;
 begin
-
+  funcoes := TFuncoes.Create;
+  funcoes.moverArquivos;
 end;
 
 procedure TfrmInstalador.btnInstalarClick(Sender: TObject);

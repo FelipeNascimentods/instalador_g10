@@ -2,20 +2,26 @@ unit funcoes;
 
 interface
 
-uses ShellAPI, Winapi.Windows, Vcl.Controls, Vcl.Forms, Vcl.Samples.Gauges;
+uses ShellAPI, Winapi.Windows, Vcl.Controls, Vcl.Forms, Vcl.Samples.Gauges,
+  ShlObj, ComObj, Registry, ActiveX,SysUtils, Windows, IOUtils;
 
 type
   TFuncoes = class
 
   private
     procedure criarBat;
+
     function ExecutarEEsperar(NomeArquivo : String) : Boolean;
+
+    procedure CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
   public
     procedure configurarHD;
     procedure configurarDB;
     procedure moverArquivos;
     procedure instalarProgramas(gauge: TGauge);
     procedure criarAtalhos;
+
+
   end;
 
 implementation
@@ -35,8 +41,43 @@ begin
 end;
 
 procedure TFuncoes.criarAtalhos;
+var
+  path : string;
 begin
-  //ok
+  for Path in TDirectory.GetFiles('C:\Users\THANDERA\Desktop\Projetos\SGC-PDV') do
+  begin
+    CreateShortcut(path,'','C:\Users\THANDERA\Desktop\Projetos\SGC-PDV',Copy(Path, 43, path.Length-46),'');
+  end;
+
+end;
+
+procedure TFuncoes.CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
+var
+  MyObject: IUnknown;
+  MySLink: IShellLink;
+  MyPFile: IPersistFile;
+  Directory: String;
+  WFileName: WideString;
+  MyReg: TRegIniFile;
+begin
+  MyObject  := CreateComObject(CLSID_ShellLink);
+  MySLink   := MyObject as IShellLink;
+  MyPFile   := MyObject as IPersistFile;
+
+  with MySLink do
+  begin
+    SetArguments(Pchar(Parameters));
+    SetPath(PChar(FileName));
+    SetWorkingDirectory(PChar(InitialDir));
+  end;
+
+  MyReg:=TRegIniFile.Create('Software\MicroSoft\Windows\CurrentVersion\Explorer');
+
+  Directory := MyReg.ReadString ('Shell Folders','Desktop','');
+  WFileName := Directory + '\app\' + ShortcutName + '.lnk';
+
+  MyPFile.Save(PWChar (WFileName), False);
+  MyReg.Free;
 end;
 
 procedure TFuncoes.criarBat;
@@ -123,8 +164,19 @@ begin
 end;
 
 procedure TFuncoes.moverArquivos;
+var
+  path : string;
+  var SH:SHFILEOPSTRUCT;
 begin
+  for Path in TDirectory.GetFiles('C:\Users\THANDERA\Desktop\Projetos') do
+    CopyFile(Pchar(path), Pchar('C:\Users\THANDERA\Desktop\Projetos\Adrian\' + Copy(Path, 36, path.Length-35)), false);
 
+  FillChar(SH, SizeOf(SH), 0);
+  SH.Wnd        := Application.Handle;
+  SH.wFunc      := FO_Copy;
+  SH.pFrom      := 'C:\Users\THANDERA\Desktop\Projetos\Nascimento' + #0;
+  SH.pTo        := 'C:\Users\THANDERA\Desktop\Projetos\Adrian' + #0;
+  SHFileOperation(SH);
 end;
 
 function TFuncoes.ExecutarEEsperar(NomeArquivo : String) : Boolean;
