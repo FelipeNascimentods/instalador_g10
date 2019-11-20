@@ -5,28 +5,27 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Samples.Gauges, Vcl.StdCtrls,
-  Vcl.Buttons, Vcl.ExtCtrls, Vcl.Imaging.pngimage;
+  Vcl.Buttons, Vcl.ExtCtrls, Vcl.Imaging.pngimage, funcoes, shellapi;
 
 type
   TfrmInstalador = class(TForm)
     pnBot: TPanel;
     pnLeft: TPanel;
     pnClient: TPanel;
-    Image1: TImage;
+    imgLogo: TImage;
     lblTitulo: TLabel;
     lblTexto: TLabel;
-    SpeedButton1: TSpeedButton;
+    btnInstalar: TSpeedButton;
     RadioButton1: TRadioButton;
     RadioButton2: TRadioButton;
     RadioButton3: TRadioButton;
     RadioButton4: TRadioButton;
     RadioButton5: TRadioButton;
-    Gauge1: TGauge;
-    procedure SpeedButton1Click(Sender: TObject);
+    barraDeProgresso: TGauge;
+    procedure btnInstalarClick(Sender: TObject);
   private
-    { Private declarations }
+    funcoes: TFuncoes;
   public
-    { Public declarations }
     procedure instalar;
   end;
 
@@ -39,12 +38,12 @@ implementation
 
 procedure TfrmInstalador.instalar;
 begin
-  ShowMessage('foi');
+  funcoes := TFuncoes.Create;
+  funcoes.moverArquivos;
 end;
 
-procedure TfrmInstalador.SpeedButton1Click(Sender: TObject);
+procedure TfrmInstalador.btnInstalarClick(Sender: TObject);
 begin
   instalar;
 end;
-
 end.

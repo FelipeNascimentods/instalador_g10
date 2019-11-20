@@ -21,11 +21,8 @@ type
     procedure instalarProgramas(gauge: TGauge);
     procedure criarAtalhos;
 
+
   end;
-
-var
-
-  DirDesktop: String;
 
 implementation
 
@@ -47,7 +44,11 @@ procedure TFuncoes.criarAtalhos;
 var
   path : string;
 begin
-    CreateShortcut('C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV\OS.exe','','C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV', 'OS','');
+  for Path in TDirectory.GetFiles('C:\Users\THANDERA\Desktop\Projetos\SGC-PDV') do
+  begin
+    CreateShortcut(path,'','C:\Users\THANDERA\Desktop\Projetos\SGC-PDV',Copy(Path, 43, path.Length-46),'');
+  end;
+
 end;
 
 procedure TFuncoes.CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
@@ -73,7 +74,7 @@ begin
   MyReg:=TRegIniFile.Create('Software\MicroSoft\Windows\CurrentVersion\Explorer');
 
   Directory := MyReg.ReadString ('Shell Folders','Desktop','');
-  WFileName := Directory + '\' + ShortcutName + '.lnk';
+  WFileName := Directory + '\app\' + ShortcutName + '.lnk';
 
   MyPFile.Save(PWChar (WFileName), False);
   MyReg.Free;
