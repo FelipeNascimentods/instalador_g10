@@ -9,9 +9,9 @@ type
   TFuncoes = class
 
   private
-    procedure instalarPostegresql;
     procedure criarBat;
     function ExecutarEEsperar(NomeArquivo : String) : Boolean;
+
     procedure CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
   public
     procedure configurarHD;
@@ -28,21 +28,11 @@ implementation
 
 { TInstalador }
 
-procedure TFuncoes.instalarPostegresql;
-var
-  sCaminho, sExe: string;
-begin
-  sCaminho := 'E:\Desenvolvimento\Componentes\INSTALADOR\G10 '+
-  'Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\Utilitarios\';
-
-  sExe := 'postgresql-11.3-1-windows-x64.exe';
-
-  if not ExecutarEEsperar(sCaminho+sExe) then
-    Application.MessageBox('Não foi possível instalar o ''postgresql-11.3-1-windows-x64'' ', 'ERRO!', MB_ICONERROR + MB_OK);
-end;
 procedure TFuncoes.configurarDB;
+var
+  a: string;
 begin
-
+  a := 'teste';
 end;
 
 procedure TFuncoes.configurarHD;
