@@ -3,7 +3,8 @@ program instalador;
 uses
   Vcl.Forms,
   uFrmInstalador in 'forms\uFrmInstalador.pas' {frmInstalador},
-  funcoes in 'classes\funcoes.pas';
+  funcoes in 'classes\funcoes.pas',
+  uFrmValidarCliente in 'forms\uFrmValidarCliente.pas' {ValidarCliente};
 
 {$R *.res}
 
