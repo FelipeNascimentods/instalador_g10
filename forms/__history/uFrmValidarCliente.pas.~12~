@@ -38,26 +38,10 @@ implementation
 
 procedure TValidarCliente.btnValidarClick(Sender: TObject);
 begin
-  try
-    if edtCPF.Text = '' then
-      raise Exception.Create('Informe um CPF.');
-
-    if edtCNPJ.Text = '' then
-      raise Exception.Create('Informe um CNPJ.');
-
-    if edtCodigo.Text = '' then
-      raise Exception.Create('Informe um Codigo de verificação.');
-
-    if funcoes.validarInstalacao(edtCNPJ.Text, edtCPF.Text, edtCodigo.Text) then
-    begin
-      verificacao := true;
-      close;
-    end;
-  except
-    on E: Exception do
-    begin
-      Application.MessageBox(PChar(E.Message), 'Atenção', MB_ICONINFORMATION + MB_OK);
-    end;
+  if funcoes.validarInstalacao(edtCNPJ.Text, edtCPF.Text, edtCodigo.Text) then
+  begin
+    verificacao := true;
+    close;
   end;
 
 end;

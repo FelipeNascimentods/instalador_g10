@@ -207,11 +207,13 @@ end;
 function TFuncoes.validarInstalacao(identificador, tecnico, cod: string):boolean;
 var
   codigo: integer;
-  ano: string;
-  retorno: integer;
+  ano: integer;
+  ano1: string;
 begin
-  ano    := copy(IntToStr(YearOf(now)), 3, 2);
-  codigo := ( DayOf(now)*MonthOf(now)+ StrToInt(ano) ) * StrToInt(copy(identificador, 0, 4));
+  ano := YearOf(now);
+  ano1 := IntToStr(ano);
+  ano1 := copy(ano1, 2, 2);
+  codigo := ( DayOf(now)*MonthOf(now)+ StrToInt(ano1) ) * StrToInt(copy(identificador, 0, 4));
 
   try
     {if not getIdentificador then
@@ -221,7 +223,7 @@ begin
       raise Exception.Create('Técnico não validado');}
 
     if not (codigo = StrToInt(cod)) then
-      raise Exception.Create('Código de verificação incorreto!');
+      raise Exception.Create(ano1);
 
     Result := true;
   except

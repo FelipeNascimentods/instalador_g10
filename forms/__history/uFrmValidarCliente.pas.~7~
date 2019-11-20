@@ -9,7 +9,6 @@ type
   TValidarCliente = class(TForm)
     lblCPF: TLabel;
     Password: TEdit;
-    btnValidar: TButton;
     edtCNPJ: TEdit;
     lblCNPJ: TLabel;
     lblCodigo: TLabel;
@@ -17,6 +16,8 @@ type
     gbxValidar: TGroupBox;
     pnValidarCliente: TPanel;
     imgVerificacao: TImage;
+    btnValidar: TButton;
+    procedure btnValidarClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -29,6 +30,11 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TValidarCliente.btnValidarClick(Sender: TObject);
+begin
+    imgVerificacao.Picture.LoadFromFile('D:\Unidade G10\img\7835_64x64.png');
+end;
 
 end.
  

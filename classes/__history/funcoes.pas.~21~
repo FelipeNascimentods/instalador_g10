@@ -208,9 +208,8 @@ function TFuncoes.validarInstalacao(identificador, tecnico, cod: string):boolean
 var
   codigo: integer;
   ano: string;
-  retorno: integer;
 begin
-  ano    := copy(IntToStr(YearOf(now)), 3, 2);
+  ano := copy(IntToStr(YearOf(now)), 3, 2);
   codigo := ( DayOf(now)*MonthOf(now)+ StrToInt(ano) ) * StrToInt(copy(identificador, 0, 4));
 
   try

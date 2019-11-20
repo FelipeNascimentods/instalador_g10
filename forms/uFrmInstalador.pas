@@ -25,8 +25,10 @@ type
     barraDeProgresso: TGauge;
     procedure btnInstalarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     funcoes: TFuncoes;
+    validarCliente: TValidarCliente;
   public
     procedure instalar;
   end;
@@ -38,21 +40,34 @@ implementation
 
 {$R *.dfm}
 
-procedure TfrmInstalador.FormCreate(Sender: TObject);
-var
-  validarCliente : TValidarCliente;
+procedure TfrmInstalador.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  validarCliente := TValidarCliente.Create(self);
-  frmInstalador.Visible := false;
-  validarCliente.ShowModal;
+  try
+    funcoes.Free;
+    validarCliente.Free;
+  finally
+    Action := caFree;
+    frmInstalador := nil;
+  end;
+end;
 
-  frmInstalador.Visible := true;
+procedure TfrmInstalador.FormCreate(Sender: TObject);
+begin
+  funcoes := TFuncoes.Create;
+  validarCliente := TValidarCliente.Create(self);
+
+  frmInstalador.Visible := false;
+
+  validarCliente.ShowModal;
+  if validarCliente.getVerificacao then
+    frmInstalador.Visible := true
+  else
+    close;
 
 end;
 
 procedure TfrmInstalador.instalar;
 begin
-  funcoes := TFuncoes.Create;
   funcoes.configurarHD;
   //funcoes.moverArquivos;
   funcoes.criarAtalhos;

@@ -32,12 +32,12 @@ var
   sCaminho, sExe: string;
 begin
   sCaminho := 'E:\Desenvolvimento\Componentes\INSTALADOR\G10 '+
-  'Sistemas [Vers√£o 06 - 2019] - Postgres 11\setup\SGC\Utilitarios\';
+  'Sistemas [Vers„o 06 - 2019] - Postgres 11\setup\SGC\Utilitarios\';
 
   sExe := 'postgresql-11.3-1-windows-x64.exe';
 
   if not ExecutarEEsperar(sCaminho+sExe) then
-    Application.MessageBox('N√£o foi poss√≠vel instalar o ''postgresql-11.3-1-windows-x64'' ', 'ERRO!', MB_ICONERROR + MB_OK);
+    Application.MessageBox('N„o foi possÌvel instalar o ''postgresql-11.3-1-windows-x64'' ', 'ERRO!', MB_ICONERROR + MB_OK);
 end;
 
 procedure TFuncoes.configurarDB;
@@ -57,25 +57,25 @@ begin
 
       if FileExists('C:\particaoOK.txt') then
       begin
-        Application.MessageBox('Parti√ß√£o - OK','SUCESSO!',mb_Ok+mb_IconExclamation);
+        Application.MessageBox('PartiÁ„o - OK','SUCESSO!',mb_Ok+mb_IconExclamation);
         DeleteFile('C:\particaoOK.txt');
       end;
 
       if FileExists('C:\particaoERROG.txt') then
       begin
-        Application.MessageBox('Parti√ß√£o - FALHA','FALHA!',mb_Ok+mb_IconExclamation);
+        Application.MessageBox('PartiÁ„o - FALHA','FALHA!',mb_Ok+mb_IconExclamation);
         DeleteFile('C:\particaoERROG.txt');
       end;
     end;
   end else
-    raise Exception.Create('Script n√£o criado!');
+    raise Exception.Create('Script n„o criado!');
 end;
 
 procedure TFuncoes.criarAtalhos;
 var
   path : string;
 begin
-    CreateShortcut('C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Vers√£o 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV\OS.exe','','C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Vers√£o 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV', 'OS','');
+    CreateShortcut('C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Vers„o 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV\OS.exe','','C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Vers„o 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV', 'OS','');
 end;
 
 procedure TFuncoes.criarBat;
@@ -89,7 +89,7 @@ begin
   Writeln(F, 'cls                                                                                 ');
   Writeln(F, 'SET disco=0                                                                         ');
   Writeln(F, 'SET particao=1                                                                      ');
-  Writeln(F, 'echo Testando Disco: %disco% .Parti√ß√£o: %particao%                                  ');
+  Writeln(F, 'echo Testando Disco: %disco% .PartiÁ„o: %particao%                                  ');
   Writeln(F, ':construction                                                                       ');
   Writeln(F, 'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                  ');
   Writeln(F, 'echo select disk %disco% > C:\scriptdisk.txt                                        ');
@@ -116,7 +116,7 @@ begin
   Writeln(F, 'echo NAO FOI POSSIVEL ENCONTRAR UMA PARTICAO UTILIZAVEL NO DISCO %disco%            ');
   Writeln(F, 'SET /a disco += 1                                                                   ');
   Writeln(F, 'SET /a particao = 1                                                                 ');
-  Writeln(F, 'REM ## VERIFICA SE O DISCO JA √â MAIOR QUE 3, SE FOR, NAO ENVIA PARA contruction e   ');
+  Writeln(F, 'REM ## VERIFICA SE O DISCO JA … MAIOR QUE 3, SE FOR, NAO ENVIA PARA contruction e   ');
   Writeln(F, 'REM SEGUE COM O SCRIPT. GERANDO O ARQUIVO particaoERRO E SAINDO DO PROGRAMA ##      ');
   Writeln(F, 'if %disco% LEQ 3 goto construction                                                  ');
   Writeln(F, 'echo ERRO > C:\particaoERRO.txt                                                     ');
@@ -173,7 +173,7 @@ begin
   gauge.Progress := 0;
   gauge.MaxValue := 3;
 
-  path := 'D:\INSTALADOR\G10 Sistemas [Vers√£o 06 - 2019] - Postgres 11\setup\';
+  path := 'D:\INSTALADOR\G10 Sistemas [Vers„o 06 - 2019] - Postgres 11\setup\';
 
   programa := 'PgManagerFullSetup.exe';
   ExecutarEEsperar(path+programa);
@@ -207,24 +207,26 @@ end;
 function TFuncoes.validarInstalacao(identificador, tecnico, cod: string):boolean;
 var
   codigo: integer;
+  ano: integer;
 begin
-  codigo := (DayOf(now)*MonthOf(now)+YearOf(now)) * StrToInt(identificador);
+  ano := YearOf(now);
+  codigo := ( DayOf(now)*MonthOf(now)+ ano ) * StrToInt(copy(identificador, 0, 4));
 
   try
     {if not getIdentificador then
-      raise Exception.Create('Cliente n√£o validado');
+      raise Exception.Create('Cliente n„o validado');
 
     if not getTecnico then
-      raise Exception.Create('T√©cnico n√£o validado');}
+      raise Exception.Create('TÈcnico n„o validado');}
 
-    if not codigo = StrToInt(cod) then
-      raise Exception.Create('C√≥digo inv√°lido');
+    if not (codigo = StrToInt(cod)) then
+      raise Exception.Create(IntToStr(codigo));
 
     Result := true;
   except
     on E: Exception do
     begin
-      Application.MessageBox(PChar(E.Message), 'Aten√ß√£o', MB_ICONINFORMATION + MB_OK);
+      Application.MessageBox(PChar(E.Message), 'AtenÁ„o', MB_ICONINFORMATION + MB_OK);
       Result := false;
     end;
   end;

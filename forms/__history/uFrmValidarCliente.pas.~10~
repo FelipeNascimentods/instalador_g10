@@ -22,11 +22,9 @@ type
     procedure FormCreate(Sender: TObject);
   private
     funcoes :Tfuncoes;
-    verificacao: boolean;
     { Private declarations }
   public
     { Public declarations }
-    function getVerificacao: boolean;
   end;
 
 var
@@ -38,39 +36,14 @@ implementation
 
 procedure TValidarCliente.btnValidarClick(Sender: TObject);
 begin
-  try
-    if edtCPF.Text = '' then
-      raise Exception.Create('Informe um CPF.');
-
-    if edtCNPJ.Text = '' then
-      raise Exception.Create('Informe um CNPJ.');
-
-    if edtCodigo.Text = '' then
-      raise Exception.Create('Informe um Codigo de verificação.');
-
-    if funcoes.validarInstalacao(edtCNPJ.Text, edtCPF.Text, edtCodigo.Text) then
-    begin
-      verificacao := true;
-      close;
-    end;
-  except
-    on E: Exception do
-    begin
-      Application.MessageBox(PChar(E.Message), 'Atenção', MB_ICONINFORMATION + MB_OK);
-    end;
-  end;
+  if not funcoes.validarInstalacao(edtCNPJ.Text, edtCPF.Text, edtCodigo.Text) then
+    imgVerificacao.Picture.LoadFromFile('D:\Unidade G10\img\7835_64x64.png');
 
 end;
 
 procedure TValidarCliente.FormCreate(Sender: TObject);
 begin
   funcoes := TFuncoes.Create;
-  verificacao := false;
-end;
-
-function TValidarCliente.getVerificacao: boolean;
-begin
-  result := verificacao;
 end;
 
 end.

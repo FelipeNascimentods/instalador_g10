@@ -40,13 +40,13 @@ procedure TValidarCliente.btnValidarClick(Sender: TObject);
 begin
   try
     if edtCPF.Text = '' then
-      raise Exception.Create('Informe um CPF.');
+      raise Exception.Create('Informe um CPF');
 
     if edtCNPJ.Text = '' then
-      raise Exception.Create('Informe um CNPJ.');
+      raise Exception.Create('Informe um CNPJ');
 
     if edtCodigo.Text = '' then
-      raise Exception.Create('Informe um Codigo de verificação.');
+      raise Exception.Create('Informe um Codigo de verificação');
 
     if funcoes.validarInstalacao(edtCNPJ.Text, edtCPF.Text, edtCodigo.Text) then
     begin
