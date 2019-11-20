@@ -3,7 +3,7 @@ unit funcoes;
 interface
 
 uses ShellAPI, Winapi.Windows, Vcl.Controls, Vcl.Forms, Vcl.Samples.Gauges,
-  ShlObj, ComObj, Registry, ActiveX,SysUtils, Windows, IOUtils;
+  ShlObj, ComObj, Registry, ActiveX,SysUtils, IOUtils;
 
 type
   TFuncoes = class
