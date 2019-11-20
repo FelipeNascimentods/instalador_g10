@@ -267,8 +267,8 @@ begin
   codigo := ( DayOf(now)*MonthOf(now)+ StrToInt(ano) ) * StrToInt(copy(identificador, 0, 4));
 
   try
-    if not daoInstalador.getIdentificador(StrToInt(identificador)) then
-      raise Exception.Create('Cliente não validado');
+    //if not daoInstalador.getIdentificador(StrToInt(identificador)) then
+      //raise Exception.Create('Cliente não validado');
 
    // if not daoInstalador.getTecnico(StrToInt(tecnico)) then
      // raise Exception.Create('Técnico não validado');}
