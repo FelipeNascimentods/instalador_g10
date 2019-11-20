@@ -3,25 +3,30 @@ unit uFrmValidarCliente;
 interface
 
 uses Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Forms,
-  Vcl.Controls, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, Vcl.Imaging.pngimage;
+  Vcl.Controls, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, Vcl.Imaging.pngimage,
+  funcoes;
 
 type
   TValidarCliente = class(TForm)
     lblCPF: TLabel;
-    Password: TEdit;
-    edtCNPJ: TEdit;
     lblCNPJ: TLabel;
     lblCodigo: TLabel;
-    edtCodigo: TEdit;
     gbxValidar: TGroupBox;
     pnValidarCliente: TPanel;
     imgVerificacao: TImage;
     btnValidar: TButton;
+    edtCNPJ: TEdit;
+    edtCodigo: TEdit;
+    edtCPF: TEdit;
     procedure btnValidarClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
+    funcoes :Tfuncoes;
+    verificacao: boolean;
     { Private declarations }
   public
     { Public declarations }
+    function getVerificacao: boolean;
   end;
 
 var
@@ -33,7 +38,38 @@ implementation
 
 procedure TValidarCliente.btnValidarClick(Sender: TObject);
 begin
-    imgVerificacao.Picture.LoadFromFile('D:\Unidade G10\img\7835_64x64.png');
+  try
+    if edtCPF.Text = '' then
+      raise Exception.Create('Informe um CPF.');
+
+    if edtCNPJ.Text = '' then
+      raise Exception.Create('Informe um CNPJ.');
+
+    if edtCodigo.Text = '' then
+      raise Exception.Create('Informe um Codigo de verificação.');
+
+    if funcoes.validarInstalacao(edtCNPJ.Text, edtCPF.Text, edtCodigo.Text) then
+    begin
+      verificacao := true;
+    end;
+  except
+    on E: Exception do
+    begin
+      Application.MessageBox(PChar(E.Message), 'Atenção', MB_ICONINFORMATION + MB_OK);
+    end;
+  end;
+
+end;
+
+procedure TValidarCliente.FormCreate(Sender: TObject);
+begin
+  funcoes := TFuncoes.Create;
+  verificacao := false;
+end;
+
+function TValidarCliente.getVerificacao: boolean;
+begin
+  result := verificacao;
 end;
 
 end.

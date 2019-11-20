@@ -23,10 +23,13 @@ type
     RadioButton4: TRadioButton;
     RadioButton5: TRadioButton;
     barraDeProgresso: TGauge;
+    mLog: TMemo;
     procedure btnInstalarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     funcoes: TFuncoes;
+    validarCliente: TValidarCliente;
   public
     procedure instalar;
   end;
@@ -38,22 +41,40 @@ implementation
 
 {$R *.dfm}
 
-procedure TfrmInstalador.FormCreate(Sender: TObject);
-var
-  validarCliente : TValidarCliente;
+procedure TfrmInstalador.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
+  try
+    funcoes.Free;
+    validarCliente.Free;
+  finally
+    Action := caFree;
+    frmInstalador := nil;
+  end;
+end;
+
+procedure TfrmInstalador.FormCreate(Sender: TObject);
+begin
+  funcoes := TFuncoes.Create;
   validarCliente := TValidarCliente.Create(self);
+
   frmInstalador.Visible := false;
+
+  validarCliente.ShowModal;
+  if validarCliente.getVerificacao then
+    frmInstalador.Visible := true
+  else
+    close;
+
+  mLog.Clear;
   validarCliente.ShowModal;
 
   frmInstalador.Visible := true;
-
 end;
 
 procedure TfrmInstalador.instalar;
 begin
   funcoes := TFuncoes.Create;
-  funcoes.configurarHD;
+  funcoes.configurarHD(mLog);
   //funcoes.moverArquivos;
   funcoes.configurarDB;
   funcoes.criarAtalhos;

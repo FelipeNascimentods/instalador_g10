@@ -1,33 +1,34 @@
 object ValidarCliente: TValidarCliente
-  Left = 245
-  Top = 108
+  Left = 242
+  Top = 103
   BorderStyle = bsDialog
   Caption = 'Valida'#231#227'o Cliente'
-  ClientHeight = 216
-  ClientWidth = 449
+  ClientHeight = 223
+  ClientWidth = 421
   Color = clBtnFace
   ParentFont = True
   OldCreateOrder = True
-  Position = poScreenCenter
+  Position = poDesigned
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object pnValidarCliente: TPanel
     Left = 0
     Top = 0
-    Width = 449
-    Height = 216
+    Width = 421
+    Height = 223
     Align = alClient
     BevelOuter = bvNone
     Color = 15315289
     ParentBackground = False
     TabOrder = 0
-    ExplicitLeft = -26
-    ExplicitTop = 46
-    ExplicitWidth = 547
-    ExplicitHeight = 307
+    ExplicitLeft = -32
+    ExplicitTop = -152
+    ExplicitWidth = 754
+    ExplicitHeight = 469
     object imgVerificacao: TImage
       Left = 32
-      Top = 69
+      Top = 73
       Width = 65
       Height = 67
       Picture.Data = {
@@ -316,8 +317,8 @@ object ValidarCliente: TValidarCliente
         0000000049454E44AE426082}
     end
     object gbxValidar: TGroupBox
-      Left = 136
-      Top = 16
+      Left = 120
+      Top = 20
       Width = 273
       Height = 177
       TabOrder = 0
@@ -342,39 +343,9 @@ object ValidarCliente: TValidarCliente
         Height = 13
         Caption = 'Informe o seu CPF'
       end
-      object edtCNPJ: TEdit
-        Left = 24
-        Top = 67
-        Width = 220
-        Height = 19
-        Ctl3D = False
-        ParentCtl3D = False
-        PasswordChar = '*'
-        TabOrder = 0
-      end
-      object edtCodigo: TEdit
-        Left = 24
-        Top = 108
-        Width = 220
-        Height = 19
-        Ctl3D = False
-        ParentCtl3D = False
-        PasswordChar = '*'
-        TabOrder = 1
-      end
-      object Password: TEdit
-        Left = 24
-        Top = 27
-        Width = 220
-        Height = 19
-        Ctl3D = False
-        ParentCtl3D = False
-        PasswordChar = '*'
-        TabOrder = 2
-      end
       object btnValidar: TButton
         Left = 148
-        Top = 133
+        Top = 136
         Width = 86
         Height = 29
         Caption = 'Validar'
@@ -384,9 +355,30 @@ object ValidarCliente: TValidarCliente
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 3
+        TabOrder = 0
         OnClick = btnValidarClick
       end
+    end
+    object edtCNPJ: TEdit
+      Left = 145
+      Top = 87
+      Width = 223
+      Height = 21
+      TabOrder = 1
+    end
+    object edtCodigo: TEdit
+      Left = 145
+      Top = 127
+      Width = 223
+      Height = 21
+      TabOrder = 2
+    end
+    object edtCPF: TEdit
+      Left = 145
+      Top = 46
+      Width = 223
+      Height = 21
+      TabOrder = 3
     end
   end
 end
