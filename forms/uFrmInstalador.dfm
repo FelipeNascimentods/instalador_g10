@@ -183,8 +183,8 @@ object frmInstalador: TfrmInstalador
       ParentFont = False
     end
     object lblTexto: TLabel
-      Left = 6
-      Top = 72
+      Left = 8
+      Top = 46
       Width = 98
       Height = 182
       Caption = 
@@ -196,6 +196,16 @@ object frmInstalador: TfrmInstalador
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
+    end
+    object mLog: TMemo
+      Left = 8
+      Top = 234
+      Width = 347
+      Height = 207
+      Lines.Strings = (
+        'mLog')
+      ReadOnly = True
+      TabOrder = 0
     end
   end
 end
