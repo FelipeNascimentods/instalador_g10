@@ -128,29 +128,32 @@ begin
 end;
 
 function TFuncoes.ExecutarEEsperar(NomeArquivo : String) : Boolean;
-var Sh: TShellExecuteInfo;
-  CodigoSaida: DWORD;
+var
+  shell: TShellExecuteInfo;
+  codigoSaida: DWORD;
 begin
-  FillChar(Sh, SizeOf(Sh), 0) ;
-  Sh.cbSize := SizeOf(TShellExecuteInfo) ;
-  with Sh do
-    begin
-      fMask := SEE_MASK_NOCLOSEPROCESS;
-      Wnd := Application.Handle;
-      lpVerb := nil;
-      lpFile := PChar(NomeArquivo);
-      nShow := SW_SHOWNORMAL;
-    end;
-    if ShellExecuteEx(@Sh) then
-    begin
+  FillChar(shell, SizeOf(shell), 0) ;
+  shell.cbSize := SizeOf(TShellExecuteInfo) ;
+
+  with shell do
+  begin
+    fMask := SEE_MASK_NOCLOSEPROCESS;
+    Wnd := Application.Handle;
+    lpVerb := nil;
+    lpFile := PChar(NomeArquivo);
+    nShow := SW_SHOWNORMAL;
+  end;
+
+  if ShellExecuteEx(@shell) then
+  begin
     repeat
       Application.ProcessMessages;
-      GetExitCodeProcess(Sh.hProcess, CodigoSaida) ;
-    until not(CodigoSaida = STILL_ACTIVE);
+      GetExitCodeProcess(shell.hProcess, codigoSaida) ;
+    until not(codigoSaida = STILL_ACTIVE);
+
     Result := True;
-  end
-  else
-  Result := False;
+  end else
+    Result := False;
 end;
 
 end.

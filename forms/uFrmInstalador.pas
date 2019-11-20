@@ -22,9 +22,7 @@ type
     RadioButton4: TRadioButton;
     RadioButton5: TRadioButton;
     barraDeProgresso: TGauge;
-    btnTeste: TButton;
     procedure btnInstalarClick(Sender: TObject);
-    procedure btnTesteClick(Sender: TObject);
   private
     funcoes: TFuncoes;
   public
@@ -37,11 +35,6 @@ var
 implementation
 
 {$R *.dfm}
-
-procedure TfrmInstalador.btnTesteClick(Sender: TObject);
-begin
-  funcoes.instalarProgramas(barraDeProgresso);
-end;
 
 procedure TfrmInstalador.instalar;
 begin

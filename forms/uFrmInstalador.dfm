@@ -195,14 +195,5 @@ object frmInstalador: TfrmInstalador
       Font.Style = []
       ParentFont = False
     end
-    object btnTeste: TButton
-      Left = 184
-      Top = 304
-      Width = 75
-      Height = 25
-      Caption = 'Teste'
-      TabOrder = 0
-      OnClick = btnTesteClick
-    end
   end
 end
