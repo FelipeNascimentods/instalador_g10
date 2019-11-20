@@ -3,12 +3,19 @@ unit funcoes;
 interface
 
 uses ShellAPI, Winapi.Windows, Vcl.Controls, Vcl.Forms, Vcl.Samples.Gauges,
+<<<<<<< HEAD
   ShlObj, ComObj, Registry, ActiveX,SysUtils, IOUtils, Vcl.StdCtrls;
+=======
+  ShlObj, ComObj, Registry, ActiveX,SysUtils, IOUtils, DateUtils, daoInstalador;
+>>>>>>> 0330119e2d62ce62508887b242d6992e6e44b7cd
 
 type
   TFuncoes = class
 
   private
+    daoInstalador: TDaoInstalador;
+    procedure configurarPostgresql;
+    procedure execConfigPostgresql;
     procedure instalarPostegresql;
     procedure criarBat;
     function ExecutarEEsperar(NomeArquivo : String) : Boolean;
@@ -20,28 +27,40 @@ type
     procedure moverArquivos;
     procedure instalarProgramas(gauge: TGauge);
     procedure criarAtalhos;
+
+    function validarInstalacao(identificador, tecnico, cod: string):boolean;
   end;
 
 implementation
 
 { TInstalador }
 
+uses uFrmInstalador;
+
 procedure TFuncoes.instalarPostegresql;
 var
   sCaminho, sExe: string;
 begin
+  try
   sCaminho := 'E:\Desenvolvimento\Componentes\INSTALADOR\G10 '+
-  'Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\Utilitarios\';
+              'Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\Utilitarios\';
 
   sExe := 'postgresql-11.3-1-windows-x64.exe';
 
-  if not ExecutarEEsperar(sCaminho+sExe) then
+  frmInstalador.Visible := false;
+
+  ExecutarEEsperar(sCaminho+sExe);
+  except
+    frmInstalador.Visible := true;
     Application.MessageBox('Não foi possível instalar o ''postgresql-11.3-1-windows-x64'' ', 'ERRO!', MB_ICONERROR + MB_OK);
+  end;
+  frmInstalador.Visible := true;
 end;
 
 procedure TFuncoes.configurarDB;
 begin
-
+  instalarPostegresql;
+  execConfigPostgresql;
 end;
 
 procedure TFuncoes.configurarHD(memo:TMemo);
@@ -67,9 +86,22 @@ begin
         DeleteFile('C:\output.txt');
       end;
     end;
-  end
-  else
+  end else
     raise Exception.Create('Script não criado!');
+end;
+
+procedure TFuncoes.configurarPostgresql;
+var
+  bat : TextFile;
+begin
+  AssignFile(bat, 'E:\configPostgresql.bat');
+  Rewrite(bat);
+  Writeln(bat, 'set PGUSER=postgres                                          ');
+  Writeln(bat, 'set PGPASSWORD=info$g10112                                   ');
+  Writeln(bat, 'C:\Program Files\PostgreSQL\11\bin\pg_restore.exe --host localhost   '+
+  '--port 5432 --username postgres --dbname db_sgc --verbose "E:\Desenvolvimento\Componentes\INSTALADOR\G10 Sistemas [Versão 06 - 2019] - Postgres 11\setup\db_sgc.backup"');
+
+  CloseFile(bat);
 end;
 
 procedure TFuncoes.criarAtalhos;
@@ -150,6 +182,18 @@ begin
   CloseFile(F);
 end;
 
+procedure TFuncoes.execConfigPostgresql;
+begin
+  try
+    configurarPostgresql;
+
+    if FileExists('E:\configPostgresql.bat') then
+      ExecutarEEsperar('E:\configPostgresql.bat');
+  finally
+    DeleteFile('E:\configPostgresql.bat');
+  end;
+end;
+
 procedure TFuncoes.CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
 var
   MyObject: IUnknown;
@@ -215,6 +259,32 @@ begin
   SH.pFrom      := 'C:\Users\THANDERA\Desktop\Projetos\Nascimento' + #0;
   SH.pTo        := 'C:\Users\THANDERA\Desktop\Projetos\Adrian' + #0;
   SHFileOperation(SH);
+end;
+
+function TFuncoes.validarInstalacao(identificador, tecnico, cod: string):boolean;
+var
+  codigo: integer;
+begin
+  codigo := (DayOf(now)*MonthOf(now)+YearOf(now)) * StrToInt(identificador);
+
+  try
+    if not daoInstalador.getIdentificador(StrToInt(identificador)) then
+      raise Exception.Create('Cliente não validado');
+
+    if not daoInstalador.getTecnico(StrToInt(tecnico)) then
+      raise Exception.Create('Técnico não validado');
+
+    if not codigo = StrToInt(cod) then
+      raise Exception.Create('Código inválido');
+
+    Result := true;
+  except
+    on E: Exception do
+    begin
+      Application.MessageBox(PChar(E.Message), 'Atenção', MB_ICONINFORMATION + MB_OK);
+      Result := false;
+    end;
+  end;
 end;
 
 function TFuncoes.ExecutarEEsperar(NomeArquivo : String) : Boolean;
