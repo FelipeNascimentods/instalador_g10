@@ -22,7 +22,9 @@ type
     RadioButton4: TRadioButton;
     RadioButton5: TRadioButton;
     barraDeProgresso: TGauge;
+    mLog: TMemo;
     procedure btnInstalarClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     funcoes: TFuncoes;
   public
@@ -36,10 +38,15 @@ implementation
 
 {$R *.dfm}
 
+procedure TfrmInstalador.FormCreate(Sender: TObject);
+begin
+  mLog.Clear;
+end;
+
 procedure TfrmInstalador.instalar;
 begin
   funcoes := TFuncoes.Create;
-  funcoes.configurarHD;
+  funcoes.configurarHD(mLog);
   //funcoes.moverArquivos;
   funcoes.criarAtalhos;
 end;
