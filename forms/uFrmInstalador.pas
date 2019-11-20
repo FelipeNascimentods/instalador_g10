@@ -40,20 +40,15 @@ implementation
 {$R *.dfm}
 
 procedure TfrmInstalador.FormCreate(Sender: TObject);
-<<<<<<< HEAD
-begin
-  mLog.Clear;
-=======
 var
   validarCliente : TValidarCliente;
 begin
   validarCliente := TValidarCliente.Create(self);
   frmInstalador.Visible := false;
+  mLog.Clear;
   validarCliente.ShowModal;
 
   frmInstalador.Visible := true;
-
->>>>>>> 0330119e2d62ce62508887b242d6992e6e44b7cd
 end;
 
 procedure TfrmInstalador.instalar;
