@@ -3,12 +3,14 @@ unit funcoes;
 interface
 
 uses ShellAPI, Winapi.Windows, Vcl.Controls, Vcl.Forms, Vcl.Samples.Gauges,
-  ShlObj, ComObj, Registry, ActiveX,SysUtils, IOUtils, DateUtils;
+  ShlObj, ComObj, Registry, ActiveX,SysUtils, IOUtils, DateUtils, daoInstalador;
 
 type
   TFuncoes = class
 
   private
+    daoInstalador: TDaoInstalador;
+
     procedure instalarPostegresql;
     procedure criarBat;
     function ExecutarEEsperar(NomeArquivo : String) : Boolean;
@@ -211,11 +213,11 @@ begin
   codigo := (DayOf(now)*MonthOf(now)+YearOf(now)) * StrToInt(identificador);
 
   try
-    {if not getIdentificador then
+    if not daoInstalador.getIdentificador(StrToInt(identificador)) then
       raise Exception.Create('Cliente não validado');
 
-    if not getTecnico then
-      raise Exception.Create('Técnico não validado');}
+    if not daoInstalador.getTecnico(StrToInt(tecnico)) then
+      raise Exception.Create('Técnico não validado');
 
     if not codigo = StrToInt(cod) then
       raise Exception.Create('Código inválido');
