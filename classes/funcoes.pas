@@ -45,6 +45,28 @@ end;
 procedure TFuncoes.configurarHD;
 begin
   criarBat;
+
+  if FileExists('C:\script.bat') then
+  begin
+    if ExecutarEEsperar('C:\script.bat') then
+    begin
+      DeleteFile('C:\script.bat');
+      
+      if FileExists('C:\particaoOK.txt') then
+      begin
+        Application.MessageBox('Partição - OK','SUCESSO!',mb_Ok+mb_IconExclamation);
+        DeleteFile('C:\particaoOK.txt');
+      end;
+      
+      if FileExists('C:\particaoERROG.txt') then
+      begin
+        Application.MessageBox('Partição - FALHA','FALHA!',mb_Ok+mb_IconExclamation);
+        DeleteFile('C:\particaoERROG.txt');
+      end;
+    end;
+  end
+  else
+    raise Exception.Create('Script não criado!');
 end;
 
 procedure TFuncoes.criarAtalhos;
@@ -78,7 +100,7 @@ begin
   Writeln(F, 'if not exist X:\ (                                                                  ');
   Writeln(F, ':particao                                                                           ');
   Writeln(F, 'pushd C:\                                                                           ');
-  Writeln(F, 'diskpart /s C:\scriptdisk.txt                                                       ');
+  Writeln(F, 'diskpart /s C:\scriptdisk.txt > logfile.txt                                         ');
   Writeln(F, 'echo ESSE AQUI! %errorlevel%                                                        ');
   Writeln(F, 'if errorlevel == 0 (                                                                ');
   Writeln(F, 'goto okz                                                                            ');
@@ -108,7 +130,7 @@ begin
   Writeln(F, ')                                                                                   ');
   Writeln(F, ':fim                                                                                ');
   Writeln(F, 'echo CONCLUIDO!                                                                     ');
-  Write(F,   'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                    ');
+  Write(F,   'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                  ');
 
   CloseFile(F);
 end;

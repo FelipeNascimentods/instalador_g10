@@ -3,7 +3,7 @@ unit funcoes;
 interface
 
 uses ShellAPI, Winapi.Windows, Vcl.Controls, Vcl.Forms, Vcl.Samples.Gauges,
-  ShlObj, ComObj, Registry, ActiveX,SysUtils, IOUtils;
+  ShlObj, ComObj, Registry, ActiveX,SysUtils, IOUtils, DateUtils;
 
 type
   TFuncoes = class
@@ -19,10 +19,9 @@ type
     procedure moverArquivos;
     procedure instalarProgramas(gauge: TGauge);
     procedure criarAtalhos;
-  end;
 
-var
-  DirDesktop: String;
+    function validarInstalacao(identificador, tecnico, cod: string):boolean;
+  end;
 
 implementation
 
@@ -33,13 +32,14 @@ var
   sCaminho, sExe: string;
 begin
   sCaminho := 'E:\Desenvolvimento\Componentes\INSTALADOR\G10 '+
-  'Sistemas [Vers�o 06 - 2019] - Postgres 11\setup\SGC\Utilitarios\';
+  'Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\Utilitarios\';
 
   sExe := 'postgresql-11.3-1-windows-x64.exe';
 
   if not ExecutarEEsperar(sCaminho+sExe) then
-    Application.MessageBox('N�o foi poss�vel instalar o ''postgresql-11.3-1-windows-x64'' ', 'ERRO!', MB_ICONERROR + MB_OK);
+    Application.MessageBox('Não foi possível instalar o ''postgresql-11.3-1-windows-x64'' ', 'ERRO!', MB_ICONERROR + MB_OK);
 end;
+
 procedure TFuncoes.configurarDB;
 begin
 
@@ -48,13 +48,34 @@ end;
 procedure TFuncoes.configurarHD;
 begin
   criarBat;
+
+  if FileExists('C:\script.bat') then
+  begin
+    if ExecutarEEsperar('C:\script.bat') then
+    begin
+      DeleteFile('C:\script.bat');
+
+      if FileExists('C:\particaoOK.txt') then
+      begin
+        Application.MessageBox('Partição - OK','SUCESSO!',mb_Ok+mb_IconExclamation);
+        DeleteFile('C:\particaoOK.txt');
+      end;
+
+      if FileExists('C:\particaoERROG.txt') then
+      begin
+        Application.MessageBox('Partição - FALHA','FALHA!',mb_Ok+mb_IconExclamation);
+        DeleteFile('C:\particaoERROG.txt');
+      end;
+    end;
+  end else
+    raise Exception.Create('Script não criado!');
 end;
 
 procedure TFuncoes.criarAtalhos;
 var
   path : string;
 begin
-    CreateShortcut('C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Vers�o 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV\OS.exe','','C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Vers�o 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV', 'OS','');
+    CreateShortcut('C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV\OS.exe','','C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV', 'OS','');
 end;
 
 procedure TFuncoes.criarBat;
@@ -68,7 +89,7 @@ begin
   Writeln(F, 'cls                                                                                 ');
   Writeln(F, 'SET disco=0                                                                         ');
   Writeln(F, 'SET particao=1                                                                      ');
-  Writeln(F, 'echo Testando Disco: %disco% .Parti��o: %particao%                                  ');
+  Writeln(F, 'echo Testando Disco: %disco% .Partição: %particao%                                  ');
   Writeln(F, ':construction                                                                       ');
   Writeln(F, 'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                  ');
   Writeln(F, 'echo select disk %disco% > C:\scriptdisk.txt                                        ');
@@ -81,7 +102,7 @@ begin
   Writeln(F, 'if not exist X:\ (                                                                  ');
   Writeln(F, ':particao                                                                           ');
   Writeln(F, 'pushd C:\                                                                           ');
-  Writeln(F, 'diskpart /s C:\scriptdisk.txt                                                       ');
+  Writeln(F, 'diskpart /s C:\scriptdisk.txt > logfile.txt                                         ');
   Writeln(F, 'echo ESSE AQUI! %errorlevel%                                                        ');
   Writeln(F, 'if errorlevel == 0 (                                                                ');
   Writeln(F, 'goto okz                                                                            ');
@@ -95,7 +116,7 @@ begin
   Writeln(F, 'echo NAO FOI POSSIVEL ENCONTRAR UMA PARTICAO UTILIZAVEL NO DISCO %disco%            ');
   Writeln(F, 'SET /a disco += 1                                                                   ');
   Writeln(F, 'SET /a particao = 1                                                                 ');
-  Writeln(F, 'REM ## VERIFICA SE O DISCO JA � MAIOR QUE 3, SE FOR, NAO ENVIA PARA contruction e   ');
+  Writeln(F, 'REM ## VERIFICA SE O DISCO JA É MAIOR QUE 3, SE FOR, NAO ENVIA PARA contruction e   ');
   Writeln(F, 'REM SEGUE COM O SCRIPT. GERANDO O ARQUIVO particaoERRO E SAINDO DO PROGRAMA ##      ');
   Writeln(F, 'if %disco% LEQ 3 goto construction                                                  ');
   Writeln(F, 'echo ERRO > C:\particaoERRO.txt                                                     ');
@@ -111,7 +132,7 @@ begin
   Writeln(F, ')                                                                                   ');
   Writeln(F, ':fim                                                                                ');
   Writeln(F, 'echo CONCLUIDO!                                                                     ');
-  Write(F,   'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                    ');
+  Write(F,   'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                  ');
 
   CloseFile(F);
 end;
@@ -152,7 +173,7 @@ begin
   gauge.Progress := 0;
   gauge.MaxValue := 3;
 
-  path := 'D:\INSTALADOR\G10 Sistemas [Vers�o 06 - 2019] - Postgres 11\setup\';
+  path := 'D:\INSTALADOR\G10 Sistemas [Versão 06 - 2019] - Postgres 11\setup\';
 
   programa := 'PgManagerFullSetup.exe';
   ExecutarEEsperar(path+programa);
@@ -181,6 +202,32 @@ begin
   SH.pFrom      := 'C:\Users\THANDERA\Desktop\Projetos\Nascimento' + #0;
   SH.pTo        := 'C:\Users\THANDERA\Desktop\Projetos\Adrian' + #0;
   SHFileOperation(SH);
+end;
+
+function TFuncoes.validarInstalacao(identificador, tecnico, cod: string):boolean;
+var
+  codigo: integer;
+begin
+  codigo := (DayOf(now)*MonthOf(now)+YearOf(now)) * StrToInt(identificador);
+
+  try
+    {if not getIdentificador then
+      raise Exception.Create('Cliente não validado');
+
+    if not getTecnico then
+      raise Exception.Create('Técnico não validado');}
+
+    if not codigo = StrToInt(cod) then
+      raise Exception.Create('Código inválido');
+
+    Result := true;
+  except
+    on E: Exception do
+    begin
+      Application.MessageBox(PChar(E.Message), 'Atenção', MB_ICONINFORMATION + MB_OK);
+      Result := false;
+    end;
+  end;
 end;
 
 function TFuncoes.ExecutarEEsperar(NomeArquivo : String) : Boolean;
