@@ -3,7 +3,7 @@ unit funcoes;
 interface
 
 uses ShellAPI, Winapi.Windows, Vcl.Controls, Vcl.Forms, Vcl.Samples.Gauges,
-  ShlObj, ComObj, Registry, ActiveX,SysUtils, IOUtils;
+  ShlObj, ComObj, Registry, ActiveX,SysUtils, IOUtils, DateUtils;
 
 type
   TFuncoes = class
@@ -19,6 +19,8 @@ type
     procedure moverArquivos;
     procedure instalarProgramas(gauge: TGauge);
     procedure criarAtalhos;
+
+    function validarInstalacao(identificador, tecnico, cod: string):boolean;
   end;
 
 implementation
@@ -37,6 +39,7 @@ begin
   if not ExecutarEEsperar(sCaminho+sExe) then
     Application.MessageBox('Não foi possível instalar o ''postgresql-11.3-1-windows-x64'' ', 'ERRO!', MB_ICONERROR + MB_OK);
 end;
+
 procedure TFuncoes.configurarDB;
 begin
 
@@ -51,21 +54,20 @@ begin
     if ExecutarEEsperar('C:\script.bat') then
     begin
       DeleteFile('C:\script.bat');
-      
+
       if FileExists('C:\particaoOK.txt') then
       begin
         Application.MessageBox('Partição - OK','SUCESSO!',mb_Ok+mb_IconExclamation);
         DeleteFile('C:\particaoOK.txt');
       end;
-      
+
       if FileExists('C:\particaoERROG.txt') then
       begin
         Application.MessageBox('Partição - FALHA','FALHA!',mb_Ok+mb_IconExclamation);
         DeleteFile('C:\particaoERROG.txt');
       end;
     end;
-  end
-  else
+  end else
     raise Exception.Create('Script não criado!');
 end;
 
@@ -200,6 +202,32 @@ begin
   SH.pFrom      := 'C:\Users\THANDERA\Desktop\Projetos\Nascimento' + #0;
   SH.pTo        := 'C:\Users\THANDERA\Desktop\Projetos\Adrian' + #0;
   SHFileOperation(SH);
+end;
+
+function TFuncoes.validarInstalacao(identificador, tecnico, cod: string):boolean;
+var
+  codigo: integer;
+begin
+  codigo := (DayOf(now)*MonthOf(now)+YearOf(now)) * StrToInt(identificador);
+
+  try
+    {if not getIdentificador then
+      raise Exception.Create('Cliente não validado');
+
+    if not getTecnico then
+      raise Exception.Create('Técnico não validado');}
+
+    if not codigo = StrToInt(cod) then
+      raise Exception.Create('Código inválido');
+
+    Result := true;
+  except
+    on E: Exception do
+    begin
+      Application.MessageBox(PChar(E.Message), 'Atenção', MB_ICONINFORMATION + MB_OK);
+      Result := false;
+    end;
+  end;
 end;
 
 function TFuncoes.ExecutarEEsperar(NomeArquivo : String) : Boolean;
