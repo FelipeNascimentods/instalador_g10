@@ -21,6 +21,9 @@ type
     procedure criarAtalhos;
   end;
 
+var
+  DirDesktop: String;
+
 implementation
 
 { TInstalador }
