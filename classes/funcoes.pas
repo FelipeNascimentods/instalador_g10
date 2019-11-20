@@ -24,7 +24,7 @@ type
     procedure instalarProgramas(gauge: TGauge);
     procedure criarAtalhos;
 
-    function validarInstalacao(identificador, tecnico, cod: string):boolean;
+    function validarInstalacao(identificador, tecnico, cod: string): Integer;
   end;
 
 implementation
@@ -257,31 +257,41 @@ begin
   SHFileOperation(SH);
 end;
 
-function TFuncoes.validarInstalacao(identificador, tecnico, cod: string):boolean;
+function TFuncoes.validarInstalacao(identificador, tecnico, cod: string):Integer;
 var
   codigo: integer;
   ano: string;
   retorno: integer;
 begin
+  retorno := -1;
+
   ano    := copy(IntToStr(YearOf(now)), 3, 2);
   codigo := ( DayOf(now)*MonthOf(now)+ StrToInt(ano) ) * StrToInt(copy(identificador, 0, 4));
 
   try
-    //if not daoInstalador.getIdentificador(StrToInt(identificador)) then
-      //raise Exception.Create('Cliente não validado');
+    {if not daoInstalador.getIdentificador(StrToInt(identificador)) then
+    begin
+      codigo := 1;
+      raise Exception.Create('Cliente não validado');
+    end;
 
-   // if not daoInstalador.getTecnico(StrToInt(tecnico)) then
-     // raise Exception.Create('Técnico não validado');}
-
+    if not daoInstalador.getTecnico(StrToInt(tecnico)) then
+    begin
+      codigo:= 2;
+      raise Exception.Create('Técnico não validado');
+    end;
+    }
     if not (codigo = StrToInt(cod)) then
+    begin
+      codigo := 3;
       raise Exception.Create('Código de verificação incorreto!');
-
-    Result := true;
+    end;
+    Result := 0;
   except
     on E: Exception do
     begin
       Application.MessageBox(PChar(E.Message), 'Atenção', MB_ICONINFORMATION + MB_OK);
-      Result := false;
+      Result := codigo;
     end;
   end;
 end;

@@ -66,7 +66,7 @@ begin
     mLog.Clear;
   end
   else
-  Application.Terminate;
+    Application.Terminate;
 end;
 
 procedure TfrmInstalador.instalar;

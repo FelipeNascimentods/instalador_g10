@@ -1,14 +1,18 @@
 object ValidarCliente: TValidarCliente
   Left = 242
   Top = 103
-  BorderStyle = bsDialog
-  Caption = 'Valida'#231#227'o Cliente'
-  ClientHeight = 223
+  BorderStyle = bsToolWindow
+  Caption = 'Instalador - G10 Sistemas'
+  ClientHeight = 227
   ClientWidth = 421
   Color = clBtnFace
-  ParentFont = True
-  OldCreateOrder = True
-  Position = poDesigned
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
@@ -16,7 +20,7 @@ object ValidarCliente: TValidarCliente
     Left = 0
     Top = 0
     Width = 421
-    Height = 223
+    Height = 227
     Align = alClient
     BevelOuter = bvNone
     Color = 15315289
@@ -321,7 +325,7 @@ object ValidarCliente: TValidarCliente
       Top = 20
       Width = 273
       Height = 177
-      TabOrder = 0
+      TabOrder = 3
       object lblCNPJ: TLabel
         Left = 26
         Top = 53
@@ -364,7 +368,10 @@ object ValidarCliente: TValidarCliente
       Top = 87
       Width = 223
       Height = 21
+      MaxLength = 18
       TabOrder = 1
+      OnExit = edtCNPJExit
+      OnKeyPress = edtCNPJKeyPress
     end
     object edtCodigo: TEdit
       Left = 145
@@ -378,7 +385,10 @@ object ValidarCliente: TValidarCliente
       Top = 46
       Width = 223
       Height = 21
-      TabOrder = 3
+      MaxLength = 14
+      TabOrder = 0
+      OnExit = edtCPFExit
+      OnKeyPress = edtCPFKeyPress
     end
   end
 end
