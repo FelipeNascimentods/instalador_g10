@@ -38,7 +38,13 @@ implementation
 
 procedure TfrmInstalador.instalar;
 begin
+<<<<<<< HEAD
   funcoes.criarBat;
+=======
+  funcoes := TFuncoes.Create;
+  funcoes.moverArquivos;
+  funcoes.criarAtalhos;
+>>>>>>> 5f21afd447ddeb521566ea85d2c78801c928bcf9
 end;
 
 procedure TfrmInstalador.btnInstalarClick(Sender: TObject);
