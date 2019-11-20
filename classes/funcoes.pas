@@ -9,9 +9,9 @@ type
   TFuncoes = class
 
   private
+    procedure instalarPostegresql;
     procedure criarBat;
     function ExecutarEEsperar(NomeArquivo : String) : Boolean;
-
     procedure CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
   public
     procedure configurarHD;
@@ -25,11 +25,21 @@ implementation
 
 { TInstalador }
 
-procedure TFuncoes.configurarDB;
+procedure TFuncoes.instalarPostegresql;
 var
-  a: string;
+  sCaminho, sExe: string;
 begin
-  a := 'teste';
+  sCaminho := 'E:\Desenvolvimento\Componentes\INSTALADOR\G10 '+
+  'Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\Utilitarios\';
+
+  sExe := 'postgresql-11.3-1-windows-x64.exe';
+
+  if not ExecutarEEsperar(sCaminho+sExe) then
+    Application.MessageBox('Não foi possível instalar o ''postgresql-11.3-1-windows-x64'' ', 'ERRO!', MB_ICONERROR + MB_OK);
+end;
+procedure TFuncoes.configurarDB;
+begin
+
 end;
 
 procedure TFuncoes.configurarHD;
@@ -63,11 +73,7 @@ procedure TFuncoes.criarAtalhos;
 var
   path : string;
 begin
-  for Path in TDirectory.GetFiles('C:\Users\THANDERA\Desktop\Projetos\SGC-PDV') do
-  begin
-    CreateShortcut(path,'','C:\Users\THANDERA\Desktop\Projetos\SGC-PDV',Copy(Path, 43, path.Length-46),'');
-  end;
-
+    CreateShortcut('C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV\OS.exe','','C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV', 'OS','');
 end;
 
 procedure TFuncoes.criarBat;
@@ -152,7 +158,7 @@ begin
   MyReg:=TRegIniFile.Create('Software\MicroSoft\Windows\CurrentVersion\Explorer');
 
   Directory := MyReg.ReadString ('Shell Folders','Desktop','');
-  WFileName := Directory + '\app\' + ShortcutName + '.lnk';
+  WFileName := Directory + '\' + ShortcutName + '.lnk';
 
   MyPFile.Save(PWChar (WFileName), False);
   MyReg.Free;
