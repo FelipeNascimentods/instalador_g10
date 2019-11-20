@@ -9,11 +9,7 @@ type
   TFuncoes = class
 
   private
-<<<<<<< HEAD
-=======
     procedure criarBat;
-
->>>>>>> 5f21afd447ddeb521566ea85d2c78801c928bcf9
     function ExecutarEEsperar(NomeArquivo : String) : Boolean;
 
     procedure CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
@@ -23,12 +19,6 @@ type
     procedure moverArquivos;
     procedure instalarProgramas(gauge: TGauge);
     procedure criarAtalhos;
-<<<<<<< HEAD
-    procedure criarBat;
-=======
-
-
->>>>>>> 5f21afd447ddeb521566ea85d2c78801c928bcf9
   end;
 
 implementation
@@ -44,7 +34,7 @@ end;
 
 procedure TFuncoes.configurarHD;
 begin
-
+  criarBat;
 end;
 
 procedure TFuncoes.criarAtalhos;
@@ -56,35 +46,6 @@ begin
     CreateShortcut(path,'','C:\Users\THANDERA\Desktop\Projetos\SGC-PDV',Copy(Path, 43, path.Length-46),'');
   end;
 
-end;
-
-procedure TFuncoes.CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
-var
-  MyObject: IUnknown;
-  MySLink: IShellLink;
-  MyPFile: IPersistFile;
-  Directory: String;
-  WFileName: WideString;
-  MyReg: TRegIniFile;
-begin
-  MyObject  := CreateComObject(CLSID_ShellLink);
-  MySLink   := MyObject as IShellLink;
-  MyPFile   := MyObject as IPersistFile;
-
-  with MySLink do
-  begin
-    SetArguments(Pchar(Parameters));
-    SetPath(PChar(FileName));
-    SetWorkingDirectory(PChar(InitialDir));
-  end;
-
-  MyReg:=TRegIniFile.Create('Software\MicroSoft\Windows\CurrentVersion\Explorer');
-
-  Directory := MyReg.ReadString ('Shell Folders','Desktop','');
-  WFileName := Directory + '\app\' + ShortcutName + '.lnk';
-
-  MyPFile.Save(PWChar (WFileName), False);
-  MyReg.Free;
 end;
 
 procedure TFuncoes.criarBat;
@@ -144,6 +105,35 @@ begin
   Write(F,   'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                    ');
 
   CloseFile(F);
+end;
+
+procedure TFuncoes.CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
+var
+  MyObject: IUnknown;
+  MySLink: IShellLink;
+  MyPFile: IPersistFile;
+  Directory: String;
+  WFileName: WideString;
+  MyReg: TRegIniFile;
+begin
+  MyObject  := CreateComObject(CLSID_ShellLink);
+  MySLink   := MyObject as IShellLink;
+  MyPFile   := MyObject as IPersistFile;
+
+  with MySLink do
+  begin
+    SetArguments(Pchar(Parameters));
+    SetPath(PChar(FileName));
+    SetWorkingDirectory(PChar(InitialDir));
+  end;
+
+  MyReg:=TRegIniFile.Create('Software\MicroSoft\Windows\CurrentVersion\Explorer');
+
+  Directory := MyReg.ReadString ('Shell Folders','Desktop','');
+  WFileName := Directory + '\app\' + ShortcutName + '.lnk';
+
+  MyPFile.Save(PWChar (WFileName), False);
+  MyReg.Free;
 end;
 
 procedure TFuncoes.instalarProgramas(gauge: TGauge);
