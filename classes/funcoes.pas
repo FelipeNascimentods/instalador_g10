@@ -43,7 +43,7 @@ begin
 
   sExe := 'postgresql-11.3-1-windows-x64.exe';
 
-  frmInstalador.Visible := false;
+  frmInstalador.Visible := False;
 
   ExecutarEEsperar(sCaminho+sExe);
   except

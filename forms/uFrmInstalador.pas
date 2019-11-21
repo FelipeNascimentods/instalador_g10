@@ -73,7 +73,7 @@ end;
 procedure TfrmInstalador.instalar;
 begin
   funcoes := TFuncoes.Create;
-  funcoes.configurarHD(mScript,mLog);
+  funcoes.configurarHD(mLog);
 end;
 
 procedure TfrmInstalador.btnInstalarClick(Sender: TObject);
