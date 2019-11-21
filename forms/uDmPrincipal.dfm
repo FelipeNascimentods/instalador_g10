@@ -1,24 +1,19 @@
-object dm: Tdm
+object dmPrincipal: TdmPrincipal
   OldCreateOrder = False
-  Height = 66
-  Width = 88
-  object zConn: TZConnection
+  Height = 118
+  Width = 268
+  object ZConnection: TZConnection
     ControlsCodePage = cCP_UTF16
     AutoEncodeStrings = True
     Catalog = ''
+    Connected = True
     HostName = 'localhost'
     Port = 5432
     Database = 'db_sgc'
     User = 'postgres'
     Password = 'acessog10'
     Protocol = 'postgresql'
-    Left = 8
-    Top = 8
-  end
-  object zq: TZQuery
-    Connection = zConn
-    Params = <>
-    Left = 48
-    Top = 8
+    Left = 64
+    Top = 32
   end
 end

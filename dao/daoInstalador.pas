@@ -2,35 +2,36 @@ unit daoInstalador;
 
 interface
 
-uses ZAbstractRODataset, ZAbstractDataset, ZDataset, SysUtils, ZConnection, uDm;
+uses DB, ZAbstractRODataset, ZAbstractDataset, ZDataset, SysUtils,
+     ZConnection, uDmPrincipal;
 
 type
   TDaoInstalador = class
   private
     ZQuery: TZQuery;
   public
-    function getIdentificador(identificador: integer): boolean;
+    function getIdentificador(identificador: string): boolean;
   end;
 
 implementation
 
 { TDaoInstalador }
 
-function TDaoInstalador.getIdentificador(identificador: integer): boolean;
+function TDaoInstalador.getIdentificador(identificador: string): boolean;
 var
   zSet: TZQuery;
   sSQL: string;
 begin
-  zSet := dm.zq;
-  zSet.Connection := dm.zConn;
-
+  zSet := TZQuery.Create(ZQuery);
   try
-    sSQL := 'select * from vw_pessoas where identificador = '''+IntToStr(identificador)+''' limit 1';
+    zSet.Connection := dmPrincipal.ZConnection;
+
+    sSQL := 'select * from vw_pessoas where identificador = '''+identificador+''' limit 1';
 
     zSet.Close;
     zSet.SQL.Clear;
     zSet.SQL.Text := sSQL;
-    zSet.ExecSQL;
+    zSet.Open;
 
     if zSet.IsEmpty then
       Result := false

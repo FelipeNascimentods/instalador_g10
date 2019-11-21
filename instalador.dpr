@@ -5,15 +5,15 @@ uses
   uFrmInstalador in 'forms\uFrmInstalador.pas' {frmInstalador},
   funcoes in 'classes\funcoes.pas',
   uFrmValidarCliente in 'forms\uFrmValidarCliente.pas' {frmValidarCliente},
-  uDm in 'forms\uDm.pas' {dm: TDataModule},
-  daoInstalador in 'dao\daoInstalador.pas';
+  daoInstalador in 'dao\daoInstalador.pas',
+  uDmPrincipal in 'forms\uDmPrincipal.pas' {dmPrincipal: TDataModule};
 
 {$R *.res}
 
 begin
   Application.Initialize;
-  //Application.MainFormOnTaskbar := True;
-  Application.CreateForm(Tdm, dm);
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TdmPrincipal, dmPrincipal);
   Application.CreateForm(TfrmInstalador, frmInstalador);
   Application.Run;
 end.

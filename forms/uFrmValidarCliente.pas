@@ -24,6 +24,7 @@ type
     procedure edtCNPJExit(Sender: TObject);
     procedure edtCPFKeyPress(Sender: TObject; var Key: Char);
     procedure edtCNPJKeyPress(Sender: TObject; var Key: Char);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
   private
     funcoes :Tfuncoes;
     verificacao: boolean;
@@ -60,15 +61,15 @@ begin
     if edtCodigo.Text = '' then
     begin
       edtCodigo.SetFocus;
-      raise Exception.Create('Informe um Codigo de verificação.');
+      raise Exception.Create('Informe um Codigo de verificaÃ§Ã£o.');
     end;
 
     case funcoes.validarInstalacao(deleteCaracter(edtCNPJ.Text), deleteCaracter(edtCPF.Text), edtCodigo.Text) of
     0 :
-    begin
-      verificacao := true;
-      close;
-    end;
+      begin
+        verificacao := true;
+        close;
+      end;
     1 : edtCNPJ.SetFocus;
     2 : edtCPF.SetFocus;
     3 : edtCodigo.SetFocus;
@@ -77,7 +78,7 @@ begin
   except
     on E: Exception do
     begin
-      Application.MessageBox(PChar(E.Message), 'Atenção', MB_ICONINFORMATION + MB_OK);
+      Application.MessageBox(PChar(E.Message), 'AtenÃ§Ã£o', MB_ICONINFORMATION + MB_OK);
     end;
   end;
 
@@ -174,6 +175,12 @@ begin
   funcoes := TFuncoes.Create;
   verificacao := false;
 
+end;
+
+procedure TValidarCliente.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    btnValidarClick(self);
 end;
 
 function TfrmValidarCliente.getVerificacao: boolean;

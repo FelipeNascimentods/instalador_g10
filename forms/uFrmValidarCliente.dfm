@@ -11,9 +11,11 @@ object frmValidarCliente: TfrmValidarCliente
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  KeyPreview = True
   OldCreateOrder = False
   Position = poScreenCenter
   OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
   PixelsPerInch = 96
   TextHeight = 13
   object pnValidarCliente: TPanel
@@ -366,6 +368,7 @@ object frmValidarCliente: TfrmValidarCliente
       Height = 21
       MaxLength = 18
       TabOrder = 1
+      Text = '63280838000104'
       OnExit = edtCNPJExit
       OnKeyPress = edtCNPJKeyPress
     end
@@ -375,6 +378,7 @@ object frmValidarCliente: TfrmValidarCliente
       Width = 223
       Height = 21
       TabOrder = 2
+      Text = '1582000'
     end
     object edtCPF: TEdit
       Left = 145
@@ -383,6 +387,7 @@ object frmValidarCliente: TfrmValidarCliente
       Height = 21
       MaxLength = 14
       TabOrder = 0
+      Text = '37799067837'
       OnExit = edtCPFExit
       OnKeyPress = edtCPFKeyPress
     end

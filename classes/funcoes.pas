@@ -9,7 +9,8 @@ type
   TFuncoes = class
 
   private
-    daoInstalador: TDaoInstalador;
+    dao: TDaoInstalador;
+
     procedure configurarPostgresql;
     procedure execConfigPostgresql;
     procedure instalarPostegresql;
@@ -18,6 +19,9 @@ type
     function ExecutarEsperarEnviar(NomeArquivo : String; mLog: TMemo) : Boolean;
     procedure CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
   public
+    constructor Create;
+    destructor Destroy; Override;
+
     procedure configurarHD(mLog:TMemo);
     procedure configurarDB;
     procedure moverArquivos;
@@ -38,17 +42,17 @@ var
   sCaminho, sExe: string;
 begin
   try
-  sCaminho := 'E:\Desenvolvimento\Componentes\INSTALADOR\G10 '+
-              'Sistemas [Vers„o 06 - 2019] - Postgres 11\setup\SGC\Utilitarios\';
+    sCaminho := 'E:\Desenvolvimento\Componentes\INSTALADOR\G10 '+
+                'Sistemas [Vers√£o 06 - 2019] - Postgres 11\setup\SGC\Utilitarios\';
 
-  sExe := 'postgresql-11.3-1-windows-x64.exe';
+    sExe := 'postgresql-11.3-1-windows-x64.exe';
 
-  frmInstalador.Visible := False;
+    frmInstalador.Visible := False;
 
-  ExecutarEEsperar(sCaminho+sExe);
+    ExecutarEEsperar(sCaminho+sExe);
   except
     frmInstalador.Visible := true;
-    Application.MessageBox('N„o foi possÌvel instalar o ''postgresql-11.3-1-windows-x64'' ', 'ERRO!', MB_ICONERROR + MB_OK);
+    Application.MessageBox('N√£o foi poss√≠vel instalar o ''postgresql-11.3-1-windows-x64'' ', 'ERRO!', MB_ICONERROR + MB_OK);
   end;
   frmInstalador.Visible := true;
 end;
@@ -88,7 +92,7 @@ begin
   Writeln(bat, 'set PGUSER=postgres                                          ');
   Writeln(bat, 'set PGPASSWORD=info$g10112                                   ');
   Writeln(bat, 'C:\Program Files\PostgreSQL\11\bin\pg_restore.exe --host localhost   '+
-  '--port 5432 --username postgres --dbname db_sgc --verbose "E:\Desenvolvimento\Componentes\INSTALADOR\G10 Sistemas [Vers„o 06 - 2019] - Postgres 11\setup\db_sgc.backup"');
+  '--port 5432 --username postgres --dbname db_sgc --verbose "E:\Desenvolvimento\Componentes\INSTALADOR\G10 Sistemas [Vers√£o 06 - 2019] - Postgres 11\setup\db_sgc.backup"');
 
   CloseFile(bat);
 end;
@@ -97,7 +101,7 @@ procedure TFuncoes.criarAtalhos;
 var
   path : string;
 begin
-    CreateShortcut('C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Vers„o 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV\OS.exe','','C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Vers„o 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV', 'OS','');
+    CreateShortcut('C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Vers√£o 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV\OS.exe','','C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Vers√£o 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV', 'OS','');
 end;
 
 procedure TFuncoes.criarBat;
@@ -149,19 +153,19 @@ begin
     Writeln(bat, 'echo NAO FOI POSSIVEL ENCONTRAR UMA PARTICAO UTILIZAVEL NO DISCO %disco%');
     Writeln(bat, 'SET /a disco += 1');
     Writeln(bat, 'SET /a particao = 1');
-    Writeln(bat, 'REM ## VERIFICA SE O DISCO JA … MAIOR QUE 3, SE FOR, NAO ENVIA PARA contruction e');
+    Writeln(bat, 'REM ## VERIFICA SE O DISCO JA √â MAIOR QUE 3, SE FOR, NAO ENVIA PARA contruction e');
     Writeln(bat, 'REM SEGUE COM O SCRIPT. GERANDO O ARQUIVO particaoERRO E SAINDO DO PROGRAMA ##');
     Writeln(bat, 'if %disco% LEQ 3 goto construction');
     Writeln(bat, 'echo ERRO > C:\particaoERRO.txt');
     Writeln(bat, 'goto fim');
     Writeln(bat, ':okz');
     Writeln(bat, '>>output.txt (');
-    Writeln(bat, 'echo SUCESSO: PartiÁ„o criada!');
+    Writeln(bat, 'echo SUCESSO: Parti√ß√£o criada!');
     Writeln(bat, ')');
     Writeln(bat, 'echo OK > C:\particaoOK.txt');
     Writeln(bat, 'goto fim');
     Writeln(bat, ') else (');
-    Writeln(bat, 'echo FALHA: H· partiÁ„o com a letra G > C:\particaoERROG.txt');
+    Writeln(bat, 'echo FALHA: H√° parti√ß√£o com a letra G > C:\particaoERROG.txt');
     Writeln(bat, ')');
     Writeln(bat, ':fim');
     Writeln(bat, '>>output.txt (');
@@ -171,9 +175,14 @@ begin
 
     CloseFile(bat);
   except
-    raise Exception.Create('Script n„o criado!');
+    raise Exception.Create('Script n√£o criado!');
   end;
+end;
 
+destructor TFuncoes.Destroy;
+begin
+  dao.Free;
+  inherited;
 end;
 
 procedure TFuncoes.execConfigPostgresql;
@@ -186,6 +195,11 @@ begin
   finally
     DeleteFile('E:\configPostgresql.bat');
   end;
+end;
+
+constructor TFuncoes.Create;
+begin
+  dao := TDaoInstalador.Create;
 end;
 
 procedure TFuncoes.CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
@@ -224,7 +238,7 @@ begin
   gauge.Progress := 0;
   gauge.MaxValue := 3;
 
-  path := 'D:\INSTALADOR\G10 Sistemas [Vers„o 06 - 2019] - Postgres 11\setup\';
+  path := 'D:\INSTALADOR\G10 Sistemas [Vers√£o 06 - 2019] - Postgres 11\setup\';
 
   programa := 'PgManagerFullSetup.exe';
   ExecutarEEsperar(path+programa);
@@ -264,32 +278,32 @@ begin
   retorno := -1;
 
   ano    := copy(IntToStr(YearOf(now)), 3, 2);
-  codigo := ( DayOf(now)*MonthOf(now)+ StrToInt(ano) ) * StrToInt(copy(identificador, 0, 4));
+  codigo := (DayOf(now)*MonthOf(now)+ StrToInt(ano)) * StrToInt(copy(identificador, 0, 4));
 
   try
-    {if not daoInstalador.getIdentificador(StrToInt(identificador)) then
+    if not dao.getIdentificador(identificador) then
     begin
-      codigo := 1;
-      raise Exception.Create('Cliente n„o validado');
+      retorno := 1;
+      raise Exception.Create('Cliente n√£o validado');
     end;
 
-    if not daoInstalador.getTecnico(StrToInt(tecnico)) then
+    if not dao.getIdentificador(tecnico) then
     begin
-      codigo:= 2;
-      raise Exception.Create('TÈcnico n„o validado');
+      retorno:= 2;
+      raise Exception.Create('T√©cnico n√£o validado');
     end;
-    }
+
     if not (codigo = StrToInt(cod)) then
     begin
-      codigo := 3;
-      raise Exception.Create('CÛdigo de verificaÁ„o incorreto!');
+      retorno := 3;
+      raise Exception.Create('C√≥digo de verifica√ß√£o incorreto!');
     end;
     Result := 0;
   except
     on E: Exception do
     begin
-      Application.MessageBox(PChar(E.Message), 'AtenÁ„o', MB_ICONINFORMATION + MB_OK);
-      Result := codigo;
+      Application.MessageBox(PChar(E.Message), 'Aten√ß√£o', MB_ICONINFORMATION + MB_OK);
+      Result := retorno;
     end;
   end;
 end;
