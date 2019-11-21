@@ -104,10 +104,16 @@
         </DCCReference>
         <DCCReference Include="classes\funcoes.pas"/>
         <DCCReference Include="forms\uFrmValidarCliente.pas">
-            <Form>ValidarCliente</Form>
+            <Form>frmValidarCliente</Form>
         </DCCReference>
+<<<<<<< Updated upstream
         <DCCReference Include="forms\uDm.pas">
             <Form>dm</Form>
+=======
+        <DCCReference Include="dao\daoInstalador.pas"/>
+        <DCCReference Include="forms\uDmPrincipal.pas">
+            <Form>dmPrincipal</Form>
+>>>>>>> Stashed changes
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="dao\daoInstalador.pas"/>
@@ -133,12 +139,16 @@
                 </Source>
             </Delphi.Personality>
             <Deployment Version="3">
+<<<<<<< Updated upstream
                 <DeployFile LocalName="Win32\Debug\instalador.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>instalador.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+=======
+                <DeployFile LocalName="Win32\Debug\instalador.exe" Configuration="Debug" Class="ProjectOutput"/>
+>>>>>>> Stashed changes
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="iOSSimulator">
                         <Operation>1</Operation>

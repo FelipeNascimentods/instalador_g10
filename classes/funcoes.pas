@@ -1,4 +1,4 @@
-unit funcoes;
+﻿unit funcoes;
 
 interface
 
@@ -70,6 +70,9 @@ begin
   finally
     if FileExists('C:\output.txt') then
       mLog.Lines.LoadFromFile('C:\output.txt');
+
+    if FileExists('C:\particaoERROG.txt') then
+      mLog.Lines.LoadFromFile('C:\particaoERROG.txt');
 
     DeleteFile('C:\particionaHD.bat');
     DeleteFile('C:\particaoOK.txt');
@@ -337,10 +340,6 @@ begin
       begin
         Sleep(500);
         mLog.Lines.LoadFromFile('C:\output.txt');
-      end;
-      if FileExists('C:\particaoERROG.txt') then
-      begin
-        mLog.Lines.LoadFromFile('C:\particaoERROG.txt');
       end;
 
       Application.ProcessMessages;
