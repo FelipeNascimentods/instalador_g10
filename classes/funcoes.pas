@@ -64,14 +64,14 @@ begin
   try
     criarBat;
 
-    if FileExists('C:\script.bat') then
-      ExecutarEsperarEnviar('C:\script.bat',mLog)
+    if FileExists('C:\particionaHD.bat') then
+      ExecutarEsperarEnviar('C:\particionaHD.bat',mLog)
 
   finally
     if FileExists('C:\output.txt') then
       mLog.Lines.LoadFromFile('C:\output.txt');
 
-    DeleteFile('C:\script.bat');
+    DeleteFile('C:\particionaHD.bat');
     DeleteFile('C:\particaoOK.txt');
     DeleteFile('C:\particaoERROG.txt');
     DeleteFile('C:\output.txt');
@@ -105,7 +105,7 @@ var
   bat : TextFile;
 begin
   try
-    AssignFile(bat, 'C:\script.bat');
+    AssignFile(bat, 'C:\particionaHD.bat');
     Rewrite(bat);
     Writeln(bat, '@echo off');
     Writeln(bat, 'cls');
@@ -174,7 +174,6 @@ begin
     raise Exception.Create('Script não criado!');
   end;
 
-  CloseFile(bat);
 end;
 
 procedure TFuncoes.execConfigPostgresql;
