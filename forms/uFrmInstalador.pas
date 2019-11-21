@@ -13,31 +13,26 @@ type
     pnBot: TPanel;
     pnLeft: TPanel;
     pnClient: TPanel;
+    imgLogo: TImage;
+    lblTitulo: TLabel;
+    lblTexto: TLabel;
+    btnInstalar: TSpeedButton;
     RadioButton1: TRadioButton;
     RadioButton2: TRadioButton;
     RadioButton3: TRadioButton;
     RadioButton4: TRadioButton;
     RadioButton5: TRadioButton;
     barraDeProgresso: TGauge;
-    btnInstalar: TSpeedButton;
-    SpeedButton2: TSpeedButton;
-    lblProgressBar: TLabel;
-    Memo: TMemo;
-    Image1: TImage;
-    Bevel: TBevel;
-    lblTitulo: TLabel;
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    mLog: TMemo;
+    mScript: TMemo;
     procedure btnInstalarClick(Sender: TObject);
-    procedure SpeedButton2Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
   private
     funcoes: TFuncoes;
     validarCliente: TfrmValidarCliente;
   public
     procedure instalar;
-    procedure controleShow;
-    procedure controleInstalar;
-    procedure controleFinalizado;
   end;
 
 var
@@ -47,29 +42,7 @@ implementation
 
 {$R *.dfm}
 
-procedure TfrmInstalador.controleFinalizado;
-begin
-  lblTitulo.Caption      := 'Instala��o Finalizada';
-  lblProgressBar.Caption := 'Conclu�do';
-end;
-
-procedure TfrmInstalador.controleInstalar;
-begin
-  barraDeProgresso.Visible := true;
-  lblProgressBar.Visible   := true;
-  btnInstalar.Enabled      := false;
-end;
-
-procedure TfrmInstalador.controleShow;
-begin
-  barraDeProgresso.Visible := false;
-  lblProgressBar.Visible   := false;
-  pnClient.Enabled         := false;
-end;
-
-procedure TfrmInstalador.FormCreate(Sender: TObject);
-var
-  validarCliente : TfrmValidarCliente;
+procedure TfrmInstalador.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   try
     funcoes.Free;
@@ -94,28 +67,14 @@ begin
     Application.Terminate;
 end;
 
-procedure TfrmInstalador.FormShow(Sender: TObject);
-begin
-  controleShow;
-end;
-
 procedure TfrmInstalador.instalar;
 begin
   funcoes := TFuncoes.Create;
-  //funcoes.configurarHD;
-  //funcoes.moverArquivos;
-  //funcoes.configurarDB;
-  //funcoes.criarAtalhos;
-end;
-
-procedure TfrmInstalador.SpeedButton2Click(Sender: TObject);
-begin
-  Application.Terminate;
+  funcoes.configurarHD(mLog);
 end;
 
 procedure TfrmInstalador.btnInstalarClick(Sender: TObject);
 begin
-  controleInstalar;
   instalar;
 end;
 end.

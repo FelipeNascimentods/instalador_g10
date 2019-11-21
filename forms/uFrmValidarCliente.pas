@@ -15,9 +15,6 @@ type
     pnValidarCliente: TPanel;
     imgVerificacao: TImage;
     btnValidar: TButton;
-    btnCancelar: TButton;
-    procedure btnValidarClick(Sender: TObject);
-    procedure btnCancelarClick(Sender: TObject);
     edtCNPJ: TEdit;
     edtCodigo: TEdit;
     edtCPF: TEdit;
@@ -45,11 +42,6 @@ var
 implementation
 
 {$R *.dfm}
-
-procedure TValidarCliente.btnCancelarClick(Sender: TObject);
-begin
-  Application.Terminate;
-end;
 
 procedure TfrmValidarCliente.btnValidarClick(Sender: TObject);
 begin
