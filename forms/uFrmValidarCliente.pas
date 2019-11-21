@@ -1,4 +1,4 @@
-﻿unit uFrmValidarCliente;
+unit uFrmValidarCliente;
 
 interface
 
@@ -177,7 +177,7 @@ begin
 
 end;
 
-procedure TfrmValidarCliente.FormKeyPress(Sender: TObject; var Key: Char);
+procedure TValidarCliente.FormKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key = #13 then
     btnValidarClick(self);
