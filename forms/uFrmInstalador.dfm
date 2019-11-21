@@ -208,14 +208,5 @@ object frmInstalador: TfrmInstalador
       ReadOnly = True
       TabOrder = 0
     end
-    object mScript: TMemo
-      Left = 264
-      Top = 185
-      Width = 89
-      Height = 43
-      Lines.Strings = (
-        'mScript')
-      TabOrder = 1
-    end
   end
 end

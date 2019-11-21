@@ -1,4 +1,4 @@
-unit uFrmValidarCliente;
+﻿unit uFrmValidarCliente;
 
 interface
 
@@ -25,6 +25,7 @@ type
     procedure edtCPFKeyPress(Sender: TObject; var Key: Char);
     procedure edtCNPJKeyPress(Sender: TObject; var Key: Char);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
   private
     funcoes :Tfuncoes;
     verificacao: boolean;
@@ -181,6 +182,11 @@ procedure TfrmValidarCliente.FormKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key = #13 then
     btnValidarClick(self);
+end;
+
+procedure TfrmValidarCliente.FormShow(Sender: TObject);
+begin
+  ShowWindow(Application.Handle, SW_SHOWNORMAL);
 end;
 
 function TfrmValidarCliente.getVerificacao: boolean;

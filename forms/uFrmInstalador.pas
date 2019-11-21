@@ -24,7 +24,6 @@ type
     RadioButton5: TRadioButton;
     barraDeProgresso: TGauge;
     mLog: TMemo;
-    mScript: TMemo;
     procedure btnInstalarClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
