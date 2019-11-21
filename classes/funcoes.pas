@@ -15,10 +15,10 @@ type
     procedure instalarPostegresql;
     procedure criarBat;
     function ExecutarEEsperar(NomeArquivo : String) : Boolean;
-    function ExecutarEsperarEnviar(NomeArquivo : String; memo: TMemo) : Boolean;
+    function ExecutarEsperarEnviar(NomeArquivo : String; mLog: TMemo) : Boolean;
     procedure CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
   public
-    procedure configurarHD(memo:TMemo);
+    procedure configurarHD(mLog:TMemo);
     procedure configurarDB;
     procedure moverArquivos;
     procedure instalarProgramas(gauge: TGauge);
@@ -43,7 +43,7 @@ begin
 
   sExe := 'postgresql-11.3-1-windows-x64.exe';
 
-  frmInstalador.Visible := false;
+  frmInstalador.Visible := False;
 
   ExecutarEEsperar(sCaminho+sExe);
   except
@@ -59,32 +59,25 @@ begin
   execConfigPostgresql;
 end;
 
-procedure TFuncoes.configurarHD(memo:TMemo);
+procedure TFuncoes.configurarHD(mLog:TMemo);
 begin
-  criarBat;
+  try
+    criarBat;
 
-  if FileExists('C:\script.bat') then
-  begin
-    if ExecutarEsperarEnviar('C:\script.bat',memo) then
-    begin
-      DeleteFile('C:\script.bat');
+    if FileExists('C:\particionaHD.bat') then
+      ExecutarEsperarEnviar('C:\particionaHD.bat',mLog)
 
-      if FileExists('C:\particaoOK.txt') then
-      begin
-        DeleteFile('C:\particaoOK.txt');
-        DeleteFile('C:\output.txt');
-      end;
+  finally
+    if FileExists('C:\output.txt') then
+      mLog.Lines.LoadFromFile('C:\output.txt');
 
-      if FileExists('C:\particaoERROG.txt') then
-      begin
-        Application.MessageBox('Partição - FALHA','FALHA!',mb_Ok+mb_IconExclamation);
-        DeleteFile('C:\particaoERROG.txt');
-        DeleteFile('C:\output.txt');
-      end;
-    end;
-  end else
-    raise Exception.Create('Script não criado!');
+    DeleteFile('C:\particionaHD.bat');
+    DeleteFile('C:\particaoOK.txt');
+    DeleteFile('C:\particaoERROG.txt');
+    DeleteFile('C:\output.txt');
+  end
 end;
+
 
 procedure TFuncoes.configurarPostgresql;
 var
@@ -109,73 +102,78 @@ end;
 
 procedure TFuncoes.criarBat;
 var
-  F : TextFile;
+  bat : TextFile;
 begin
-  AssignFile(F, 'C:\script.bat');
-  Rewrite(F);
+  try
+    AssignFile(bat, 'C:\particionaHD.bat');
+    Rewrite(bat);
+    Writeln(bat, '@echo off');
+    Writeln(bat, 'cls');
+    Writeln(bat, 'SET disco=0');
+    Writeln(bat, 'SET particao=1');
+    Writeln(bat, '>output.txt (');
+    Writeln(bat, 'echo PARTICIONAR HD');
+    Writeln(bat, ')');
+    Writeln(bat, '>>output.txt (');
+    Writeln(bat, 'echo criando SCRIPT');
+    Writeln(bat, ')');
+    Writeln(bat, ':construction');
+    Writeln(bat, 'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt');
+    Writeln(bat, 'echo select disk %disco% > C:\scriptdisk.txt');
+    Writeln(bat, 'echo select partition %particao% >> C:\scriptdisk.txt');
+    Writeln(bat, 'echo shrink desired=300 minimum=300 >> C:\scriptdisk.txt');
+    Writeln(bat, 'echo create partition primary size=300 >> C:\scriptdisk.txt');
+    Writeln(bat, 'echo assign letter=X >> C:\scriptdisk.txt');
+    Writeln(bat, 'echo format fs=ntfs label="G10DB" quick >> C:\scriptdisk.txt');
+    Writeln(bat, 'echo exit >> C:\scriptdisk.txt');
+    Writeln(bat, 'if not exist X:\ (');
+    Writeln(bat, ':particao');
+    Writeln(bat, 'pushd C:\');
+    Writeln(bat, '>>output.txt (');
+    Writeln(bat, 'echo testando SCRIPT na particao: %particao%');
+    Writeln(bat, ')');
+    Writeln(bat, 'diskpart /s C:\scriptdisk.txt');
+    Writeln(bat, 'echo resultado: %errorlevel%');
+    Writeln(bat, 'if errorlevel == 0 (');
+    Writeln(bat, '>>output.txt (');
+    Writeln(bat, 'echo SCRIPT criado');
+    Writeln(bat, 'echo SCRIPT executado!');
+    Writeln(bat, ')');
+    Writeln(bat, 'goto okz');
+    Writeln(bat, ') else (');
+    Writeln(bat, 'SET /a particao += 1');
+    Writeln(bat, 'if %particao% GTR 5 goto particaoERROR');
+    Writeln(bat, 'goto construction');
+    Writeln(bat, ')');
+    Writeln(bat, ':particaoERROR');
+    Writeln(bat, 'echo NAO FOI POSSIVEL ENCONTRAR UMA PARTICAO UTILIZAVEL NO DISCO %disco%');
+    Writeln(bat, 'SET /a disco += 1');
+    Writeln(bat, 'SET /a particao = 1');
+    Writeln(bat, 'REM ## VERIFICA SE O DISCO JA É MAIOR QUE 3, SE FOR, NAO ENVIA PARA contruction e');
+    Writeln(bat, 'REM SEGUE COM O SCRIPT. GERANDO O ARQUIVO particaoERRO E SAINDO DO PROGRAMA ##');
+    Writeln(bat, 'if %disco% LEQ 3 goto construction');
+    Writeln(bat, 'echo ERRO > C:\particaoERRO.txt');
+    Writeln(bat, 'goto fim');
+    Writeln(bat, ':okz');
+    Writeln(bat, '>>output.txt (');
+    Writeln(bat, 'echo SUCESSO: Partição criada!');
+    Writeln(bat, ')');
+    Writeln(bat, 'echo OK > C:\particaoOK.txt');
+    Writeln(bat, 'goto fim');
+    Writeln(bat, ') else (');
+    Writeln(bat, 'echo FALHA: Há partição com a letra G > C:\particaoERROG.txt');
+    Writeln(bat, ')');
+    Writeln(bat, ':fim');
+    Writeln(bat, '>>output.txt (');
+    Writeln(bat, 'echo CONCLUIDO!');
+    Writeln(bat, ')');
+    Write(bat,   'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt');
 
-  Writeln(F, '@echo off                                                                             ');
-  Writeln(F, 'echo PARTICIONAR HD > output.txt                                                     ');
-  Writeln(F, 'cls                                                                                   ');
-  Writeln(F, 'SET disco=0                                                                           ');
-  Writeln(F, 'SET particao=1                                                                        ');
-  Writeln(F, '                                                                                      ');
-  Writeln(F, 'echo criando SCRIPT >> output.txt                                                     ');
-  Writeln(F, '                                                                                      ');
-  Writeln(F, ':construction                                                                         ');
-  Writeln(F, 'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                    ');
-  Writeln(F, 'echo select disk %disco% > C:\scriptdisk.txt                                          ');
-  Writeln(F, 'echo select partition %particao% >> C:\scriptdisk.txt                                 ');
-  Writeln(F, 'echo shrink desired=300 minimum=300 >> C:\scriptdisk.txt                              ');
-  Writeln(F, 'echo create partition primary size=300 >> C:\scriptdisk.txt                           ');
-  Writeln(F, 'echo assign letter=X >> C:\scriptdisk.txt                                             ');
-  Writeln(F, 'echo format fs=ntfs label="G10DB" quick >> C:\scriptdisk.txt                          ');
-  Writeln(F, 'echo exit >> C:\scriptdisk.txt                                                        ');
-  Writeln(F, '                                                                                      ');
-  Writeln(F, 'if not exist X:\ (                                                                    ');
-  Writeln(F, ':particao                                                                             ');
-  Writeln(F, 'pushd C:\                                                                             ');
-  Writeln(F, '                                                                                      ');
-  Writeln(F, 'echo testando SCRIPT na particao: %particao% >> output.txt                            ');
-  Writeln(F, '                                                                                      ');
-  Writeln(F, 'diskpart /s C:\scriptdisk.txt                                                         ');
-  Writeln(F, 'echo resultado: %errorlevel%                                                          ');
-  Writeln(F, 'if errorlevel == 0 (                                                                  ');
-  Writeln(F, 'echo SCRIPT criado >> output.txt                                                      ');
-  Writeln(F, 'echo SCRIPT executado! >> output.txt                                                  ');
-  Writeln(F, 'goto okz                                                                              ');
-  Writeln(F, '                                                                                      ');
-  Writeln(F, ') else (                                                                              ');
-  Writeln(F, 'SET /a particao += 1                                                                  ');
-  Writeln(F, 'if %particao% GTR 5 goto particaoERROR                                                ');
-  Writeln(F, 'goto construction                                                                     ');
-  Writeln(F, ')                                                                                     ');
-  Writeln(F, '                                                                                      ');
-  Writeln(F, 'echo SCRIPT criado >> output.txt                                                      ');
-  Writeln(F, '                                                                                      ');
-  Writeln(F, ':particaoERROR                                                                        ');
-  Writeln(F, 'echo NAO FOI POSSIVEL ENCONTRAR UMA PARTICAO UTILIZAVEL NO DISCO %disco%              ');
-  Writeln(F, 'SET /a disco += 1                                                                     ');
-  Writeln(F, 'SET /a particao = 1                                                                   ');
-  Writeln(F, 'REM ## VERIFICA SE O DISCO JA É MAIOR QUE 3, SE FOR, NAO ENVIA PARA contruction e     ');
-  Writeln(F, 'REM SEGUE COM O SCRIPT. GERANDO O ARQUIVO particaoERRO E SAINDO DO PROGRAMA ##        ');
-  Writeln(F, 'if %disco% LEQ 3 goto construction                                                    ');
-  Writeln(F, 'echo ERRO > C:\particaoERRO.txt                                                       ');
-  Writeln(F, 'goto fim                                                                              ');
-  Writeln(F, ':okz                                                                                  ');
-  Writeln(F, 'echo Particao criada com SUCESSO! >> output.txt                                       ');
-  Writeln(F, 'echo OK > C:\particaoOK.txt                                                           ');
-  Writeln(F, 'goto fim                                                                              ');
-  Writeln(F, ') else (                                                                              ');
-  Writeln(F, 'echo Ja existe a particao G: >> output.txt                                            ');
-  Writeln(F, 'echo.                                                                                 ');
-  Writeln(F, 'echo EXISTEG > C:\particaoERROG.txt                                                   ');
-  Writeln(F, ')                                                                                     ');
-  Writeln(F, ':fim                                                                                  ');
-  Writeln(F, 'echo CONCLUIDO!                                                                       ');
-  Write(F,   'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                    ');
+    CloseFile(bat);
+  except
+    raise Exception.Create('Script não criado!');
+  end;
 
-  CloseFile(F);
 end;
 
 procedure TFuncoes.execConfigPostgresql;
@@ -325,7 +323,7 @@ begin
     Result := False;
 end;
 
-function TFuncoes.ExecutarEsperarEnviar(NomeArquivo : String; memo : TMemo) : Boolean;
+function TFuncoes.ExecutarEsperarEnviar(NomeArquivo : String; mLog : TMemo) : Boolean;
 var
   shell: TShellExecuteInfo;
   codigoSaida: DWORD;
@@ -339,17 +337,22 @@ begin
     Wnd    := Application.Handle;
     lpVerb := nil;
     lpFile := PChar(NomeArquivo);
-    nShow  := SW_HIDE;
+    nShow  := SW_SHOWNORMAL;
   end;
 
   if ShellExecuteEx(@shell) then
   begin
     repeat
-      {if FileExists('C:\output.txt') then
+      if FileExists('C:\output.txt') then
       begin
-        Sleep(1000);
-        memo.Lines.LoadFromFile('C:\output.txt');
-      end;  }
+        Sleep(500);
+        mLog.Lines.LoadFromFile('C:\output.txt');
+      end;
+      if FileExists('C:\particaoERROG.txt') then
+      begin
+        mLog.Lines.LoadFromFile('C:\particaoERROG.txt');
+      end;
+
       Application.ProcessMessages;
       GetExitCodeProcess(shell.hProcess, codigoSaida);
     until not(codigoSaida = STILL_ACTIVE);
