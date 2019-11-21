@@ -10,6 +10,7 @@ type
 
   private
     daoInstalador: TDaoInstalador;
+    procedure criarScript(memo:TMemo);
     procedure configurarPostgresql;
     procedure execConfigPostgresql;
     procedure instalarPostegresql;
@@ -18,7 +19,7 @@ type
     function ExecutarEsperarEnviar(NomeArquivo : String; memo: TMemo) : Boolean;
     procedure CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
   public
-    procedure configurarHD(memo:TMemo);
+    procedure configurarHD(mScript:TMemo;mLog:TMemo);
     procedure configurarDB;
     procedure moverArquivos;
     procedure instalarProgramas(gauge: TGauge);
@@ -59,15 +60,17 @@ begin
   execConfigPostgresql;
 end;
 
-procedure TFuncoes.configurarHD(memo:TMemo);
+procedure TFuncoes.configurarHD(mScript:TMemo;mLog:TMemo);
 begin
-  criarBat;
+  //criarBat;
+  criarScript(mScript);
 
   if FileExists('C:\script.bat') then
   begin
-    if ExecutarEsperarEnviar('C:\script.bat',memo) then
+    ExecutarEEsperar('C:\script.bat');
+    {if ExecutarEEsperar('C:\script.bat') then
     begin
-      { DeleteFile('C:\script.bat');
+       DeleteFile('C:\script.bat');
 
       if FileExists('C:\particaoOK.txt') then
         DeleteFile('C:\particaoOK.txt');
@@ -76,9 +79,8 @@ begin
         DeleteFile('C:\particaoERROG.txt');
 
       if FileExists('C:\output.txt') then
-       DeleteFile('C:\output.txt'); }
-
-    end;
+       DeleteFile('C:\output.txt');
+    end;}
   end else
     raise Exception.Create('Script não criado!');
 end;
@@ -167,6 +169,62 @@ begin
   CloseFile(F);
 end;
 
+procedure TFuncoes.criarScript(memo: TMemo);
+begin
+  memo.Lines.Add('@echo off                                                                          ');
+  memo.Lines.Add('cls                                                                                ');
+  memo.Lines.Add('SET disco=0                                                                        ');
+  memo.Lines.Add('SET particao=1                                                                     ');
+  memo.Lines.Add('echo criando SCRIPT >> output.txt                                                  ');
+  memo.Lines.Add(':construction                                                                      ');
+  memo.Lines.Add('if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                 ');
+  memo.Lines.Add('echo select disk %disco% > C:\scriptdisk.txt                                       ');
+  memo.Lines.Add('echo select partition %particao% >> C:\scriptdisk.txt                              ');
+  memo.Lines.Add('echo shrink desired=300 minimum=300 >> C:\scriptdisk.txt                           ');
+  memo.Lines.Add('echo create partition primary size=300 >> C:\scriptdisk.txt                        ');
+  memo.Lines.Add('echo assign letter=X >> C:\scriptdisk.txt                                          ');
+  memo.Lines.Add('echo format fs=ntfs label="G10DB" quick >> C:\scriptdisk.txt                       ');
+  memo.Lines.Add('echo exit >> C:\scriptdisk.txt                                                     ');
+  memo.Lines.Add('if not exist X:\ (                                                                 ');
+  memo.Lines.Add(':particao                                                                          ');
+  memo.Lines.Add('pushd C:\                                                                          ');
+  memo.Lines.Add('echo testando SCRIPT na particao: %particao% >> output.txt                         ');
+  memo.Lines.Add('diskpart /s C:\scriptdisk.txt                                                      ');
+  memo.Lines.Add('echo resultado: %errorlevel%                                                       ');
+  memo.Lines.Add('if errorlevel == 0 (                                                               ');
+  memo.Lines.Add('echo SCRIPT criado >> output.txt                                                   ');
+  memo.Lines.Add('echo SCRIPT executado! >> output.txt                                               ');
+  memo.Lines.Add('goto okz                                                                           ');
+  memo.Lines.Add(') else (                                                                           ');
+  memo.Lines.Add('SET /a particao += 1                                                               ');
+  memo.Lines.Add('if %particao% GTR 5 goto particaoERROR                                             ');
+  memo.Lines.Add('goto construction                                                                  ');
+  memo.Lines.Add(')                                                                                  ');
+  memo.Lines.Add('echo SCRIPT criado >> output.txt                                                   ');
+  memo.Lines.Add(':particaoERROR                                                                     ');
+  memo.Lines.Add('echo NAO FOI POSSIVEL ENCONTRAR UMA PARTICAO UTILIZAVEL NO DISCO %disco%           ');
+  memo.Lines.Add('SET /a disco += 1                                                                  ');
+  memo.Lines.Add('SET /a particao = 1                                                                ');
+  memo.Lines.Add('REM ## VERIFICA SE O DISCO JA É MAIOR QUE 3, SE FOR, NAO ENVIA PARA contruction e  ');
+  memo.Lines.Add('REM SEGUE COM O SCRIPT. GERANDO O ARQUIVO particaoERRO E SAINDO DO PROGRAMA ##     ');
+  memo.Lines.Add('if %disco% LEQ 3 goto construction                                                 ');
+  memo.Lines.Add('echo ERRO > C:\particaoERRO.txt                                                    ');
+  memo.Lines.Add('goto fim                                                                           ');
+  memo.Lines.Add(':okz                                                                               ');
+  memo.Lines.Add('echo Particao criada com SUCESSO! >> output.txt                                    ');
+  memo.Lines.Add('echo OK > C:\particaoOK.txt                                                        ');
+  memo.Lines.Add('goto fim                                                                           ');
+  memo.Lines.Add(') else (                                                                           ');
+  memo.Lines.Add('echo Ja existe a particao G: >> output.txt                                         ');
+  memo.Lines.Add('echo.                                                                              ');
+  memo.Lines.Add('echo EXISTEG > C:\particaoERROG.txt                                                ');
+  memo.Lines.Add(')                                                                                  ');
+  memo.Lines.Add(':fim                                                                               ');
+  memo.Lines.Add('echo CONCLUIDO!                                                                    ');
+  memo.Lines.Add('if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                 ');
+
+  memo.Lines.SaveToFile('C:\script.bat');
+end;
 procedure TFuncoes.execConfigPostgresql;
 begin
   try
@@ -324,11 +382,11 @@ begin
   if ShellExecuteEx(@shell) then
   begin
     repeat
-      if FileExists('C:\output.txt') then
+      {if FileExists('C:\output.txt') then
       begin
         Sleep(200);
         memo.Lines.LoadFromFile('C:\output.txt');
-      end;
+      end;  }
       Application.ProcessMessages;
       GetExitCodeProcess(shell.hProcess, codigoSaida);
     until not(codigoSaida = STILL_ACTIVE);

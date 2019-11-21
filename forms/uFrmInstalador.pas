@@ -24,6 +24,7 @@ type
     RadioButton5: TRadioButton;
     barraDeProgresso: TGauge;
     mLog: TMemo;
+    mScript: TMemo;
     procedure btnInstalarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -72,7 +73,7 @@ end;
 procedure TfrmInstalador.instalar;
 begin
   funcoes := TFuncoes.Create;
-  funcoes.configurarHD(mLog);
+  funcoes.configurarHD(mScript,mLog);
 end;
 
 procedure TfrmInstalador.btnInstalarClick(Sender: TObject);
