@@ -83,6 +83,8 @@
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -103,6 +105,15 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="classes\funcoes.pas"/>
+        <DCCReference Include="forms\uFrmValidarCliente.pas">
+            <Form>ValidarCliente</Form>
+        </DCCReference>
+        <DCCReference Include="dao\daoInstalador.pas"/>
+        <DCCReference Include="forms\uDmPrincipal.pas">
+            <Form>dmPrincipal</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -123,6 +134,14 @@
                 <Source>
                     <Source Name="MainSource">instalador.dpr</Source>
                 </Source>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="C:\Componentes\COM D10RIO\ACBR\Lib\Delphi\LibD26\ACBr_Integrador.bpl">ACBrIntegrador</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\DataExplorerDBXPluginEnt260.bpl">DBExpress Enterprise Data Explorer Integration</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcboffice2k260.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcbofficexp260.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k260.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp260.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
                 <DeployFile LocalName="Win32\Debug\instalador.exe" Configuration="Debug" Class="ProjectOutput">

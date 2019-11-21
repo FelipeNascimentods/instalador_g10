@@ -9,7 +9,8 @@ type
   TFuncoes = class
 
   private
-    daoInstalador: TDaoInstalador;
+    dao: TDaoInstalador;
+
     procedure configurarPostgresql;
     procedure execConfigPostgresql;
     procedure instalarPostegresql;
@@ -18,6 +19,9 @@ type
     function ExecutarEsperarEnviar(NomeArquivo : String; memo: TMemo) : Boolean;
     procedure CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
   public
+    constructor Create;
+    destructor Destroy; Override;
+
     procedure configurarHD(memo:TMemo);
     procedure configurarDB;
     procedure moverArquivos;
@@ -38,14 +42,14 @@ var
   sCaminho, sExe: string;
 begin
   try
-  sCaminho := 'E:\Desenvolvimento\Componentes\INSTALADOR\G10 '+
-              'Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\Utilitarios\';
+    sCaminho := 'E:\Desenvolvimento\Componentes\INSTALADOR\G10 '+
+                'Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\Utilitarios\';
 
-  sExe := 'postgresql-11.3-1-windows-x64.exe';
+    sExe := 'postgresql-11.3-1-windows-x64.exe';
 
-  frmInstalador.Visible := false;
+    frmInstalador.Visible := false;
 
-  ExecutarEEsperar(sCaminho+sExe);
+    ExecutarEEsperar(sCaminho+sExe);
   except
     frmInstalador.Visible := true;
     Application.MessageBox('Não foi possível instalar o ''postgresql-11.3-1-windows-x64'' ', 'ERRO!', MB_ICONERROR + MB_OK);
@@ -115,7 +119,7 @@ begin
   Rewrite(F);
 
   Writeln(F, '@echo off                                                                             ');
-  Writeln(F, 'echo PARTICIONAR HD > output.txt                                                     ');
+  Writeln(F, 'echo PARTICIONAR HD > output.txt                                                      ');
   Writeln(F, 'cls                                                                                   ');
   Writeln(F, 'SET disco=0                                                                           ');
   Writeln(F, 'SET particao=1                                                                        ');
@@ -173,9 +177,15 @@ begin
   Writeln(F, ')                                                                                     ');
   Writeln(F, ':fim                                                                                  ');
   Writeln(F, 'echo CONCLUIDO!                                                                       ');
-  Write(F,   'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                    ');
+  Write  (F, 'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                    ');
 
   CloseFile(F);
+end;
+
+destructor TFuncoes.Destroy;
+begin
+  dao.Free;
+  inherited;
 end;
 
 procedure TFuncoes.execConfigPostgresql;
@@ -188,6 +198,11 @@ begin
   finally
     DeleteFile('E:\configPostgresql.bat');
   end;
+end;
+
+constructor TFuncoes.Create;
+begin
+  dao := TDaoInstalador.Create;
 end;
 
 procedure TFuncoes.CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
@@ -266,24 +281,24 @@ begin
   retorno := -1;
 
   ano    := copy(IntToStr(YearOf(now)), 3, 2);
-  codigo := ( DayOf(now)*MonthOf(now)+ StrToInt(ano) ) * StrToInt(copy(identificador, 0, 4));
+  codigo := (DayOf(now)*MonthOf(now)+ StrToInt(ano)) * StrToInt(copy(identificador, 0, 4));
 
   try
-    {if not daoInstalador.getIdentificador(StrToInt(identificador)) then
+    if not dao.getIdentificador(identificador) then
     begin
-      codigo := 1;
+      retorno := 1;
       raise Exception.Create('Cliente não validado');
     end;
 
-    if not daoInstalador.getTecnico(StrToInt(tecnico)) then
+    if not dao.getIdentificador(tecnico) then
     begin
-      codigo:= 2;
+      retorno:= 2;
       raise Exception.Create('Técnico não validado');
     end;
-    }
+
     if not (codigo = StrToInt(cod)) then
     begin
-      codigo := 3;
+      retorno := 3;
       raise Exception.Create('Código de verificação incorreto!');
     end;
     Result := 0;
@@ -291,7 +306,7 @@ begin
     on E: Exception do
     begin
       Application.MessageBox(PChar(E.Message), 'Atenção', MB_ICONINFORMATION + MB_OK);
-      Result := codigo;
+      Result := retorno;
     end;
   end;
 end;

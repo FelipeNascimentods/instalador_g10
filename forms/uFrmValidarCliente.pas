@@ -65,10 +65,10 @@ begin
 
     case funcoes.validarInstalacao(deleteCaracter(edtCNPJ.Text), deleteCaracter(edtCPF.Text), edtCodigo.Text) of
     0 :
-    begin
-      verificacao := true;
-      close;
-    end;
+      begin
+        verificacao := true;
+        close;
+      end;
     1 : edtCNPJ.SetFocus;
     2 : edtCPF.SetFocus;
     3 : edtCodigo.SetFocus;

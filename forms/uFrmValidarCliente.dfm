@@ -26,10 +26,6 @@ object ValidarCliente: TValidarCliente
     Color = 15315289
     ParentBackground = False
     TabOrder = 0
-    ExplicitLeft = -32
-    ExplicitTop = -152
-    ExplicitWidth = 754
-    ExplicitHeight = 469
     object imgVerificacao: TImage
       Left = 32
       Top = 73
@@ -370,6 +366,7 @@ object ValidarCliente: TValidarCliente
       Height = 21
       MaxLength = 18
       TabOrder = 1
+      Text = '63280838000104'
       OnExit = edtCNPJExit
       OnKeyPress = edtCNPJKeyPress
     end
@@ -387,6 +384,7 @@ object ValidarCliente: TValidarCliente
       Height = 21
       MaxLength = 14
       TabOrder = 0
+      Text = '37799067837'
       OnExit = edtCPFExit
       OnKeyPress = edtCPFKeyPress
     end
