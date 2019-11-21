@@ -1,21 +1,14 @@
 object frmValidarCliente: TfrmValidarCliente
-  Left = 242
-  Top = 103
-  BorderStyle = bsToolWindow
-  Caption = 'Instalador - G10 Sistemas'
-  ClientHeight = 227
-  ClientWidth = 421
+  Left = 245
+  Top = 108
+  BorderStyle = bsDialog
+  Caption = 'Autentica'#231#227'o'
+  ClientHeight = 216
+  ClientWidth = 449
   Color = clBtnFace
-  Font.Charset = DEFAULT_CHARSET
-  Font.Color = clWindowText
-  Font.Height = -11
-  Font.Name = 'Tahoma'
-  Font.Style = []
-  KeyPreview = True
-  OldCreateOrder = False
-  Position = poScreenCenter
-  OnCreate = FormCreate
-  OnKeyPress = FormKeyPress
+  ParentFont = True
+  OldCreateOrder = True
+  Position = poDesktopCenter
   PixelsPerInch = 96
   TextHeight = 13
   object pnValidarCliente: TPanel
@@ -25,12 +18,12 @@ object frmValidarCliente: TfrmValidarCliente
     Height = 227
     Align = alClient
     BevelOuter = bvNone
-    Color = 15315289
+    Color = clMoneyGreen
     ParentBackground = False
     TabOrder = 0
     object imgVerificacao: TImage
-      Left = 32
-      Top = 73
+      Left = 39
+      Top = 64
       Width = 65
       Height = 67
       Picture.Data = {
@@ -319,46 +312,119 @@ object frmValidarCliente: TfrmValidarCliente
         0000000049454E44AE426082}
     end
     object gbxValidar: TGroupBox
-      Left = 120
-      Top = 20
+      Left = 133
+      Top = 16
       Width = 273
       Height = 177
-      TabOrder = 3
+      ParentBackground = False
+      TabOrder = 0
       object lblCNPJ: TLabel
-        Left = 26
+        Left = 24
         Top = 53
-        Width = 134
+        Width = 30
         Height = 13
-        Caption = 'Informe o CNPJ da empresa'
+        Caption = 'CNPJ '
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
       end
       object lblCodigo: TLabel
-        Left = 26
+        Left = 24
         Top = 94
-        Width = 153
+        Width = 123
         Height = 13
-        Caption = 'Informe o C'#243'digo de Verifica'#231#227'o'
+        Caption = ' C'#243'digo de Verifica'#231#227'o'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
       end
       object lblCPF: TLabel
-        Left = 26
+        Left = 24
         Top = 13
-        Width = 89
+        Width = 20
         Height = 13
-        Caption = 'Informe o seu CPF'
+        Caption = 'CPF'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object edtCNPJ: TEdit
+        Left = 24
+        Top = 67
+        Width = 220
+        Height = 22
+        Ctl3D = False
+        NumbersOnly = True
+        ParentCtl3D = False
+        PasswordChar = '*'
+        TabOrder = 0
+      end
+      object edtCodigo: TEdit
+        Left = 24
+        Top = 108
+        Width = 220
+        Height = 22
+        Ctl3D = False
+        NumbersOnly = True
+        ParentCtl3D = False
+        PasswordChar = '*'
+        TabOrder = 1
+      end
+      object Password: TEdit
+        Left = 24
+        Top = 27
+        Width = 220
+        Height = 19
+        Ctl3D = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        NumbersOnly = True
+        ParentCtl3D = False
+        ParentFont = False
+        PasswordChar = '*'
+        TabOrder = 2
       end
       object btnValidar: TButton
-        Left = 148
+        Left = 78
         Top = 136
-        Width = 86
-        Height = 29
+        Width = 80
+        Height = 28
         Caption = 'Validar'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -12
+        Font.Height = -11
         Font.Name = 'Tahoma'
-        Font.Style = []
+        Font.Style = [fsBold]
         ParentFont = False
         TabOrder = 0
         OnClick = btnValidarClick
+      end
+      object btnCancelar: TButton
+        Left = 164
+        Top = 136
+        Width = 80
+        Height = 28
+        Caption = 'Cancelar'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 4
+        OnClick = btnCancelarClick
       end
     end
     object edtCNPJ: TEdit
