@@ -3,27 +3,32 @@ unit funcoes;
 interface
 
 uses ShellAPI, Winapi.Windows, Vcl.Controls, Vcl.Forms, Vcl.Samples.Gauges,
-  ShlObj, ComObj, Registry, ActiveX,SysUtils, IOUtils, DateUtils, daoInstalador;
+  ActiveX,SysUtils, IOUtils, Vcl.StdCtrls, ShlObj, ComObj, Registry, DateUtils, daoInstalador;
 
 type
   TFuncoes = class
 
   private
-    daoInstalador: TDaoInstalador;
+    dao: TDaoInstalador;
+
     procedure configurarPostgresql;
     procedure execConfigPostgresql;
     procedure instalarPostegresql;
     procedure criarBat;
     function ExecutarEEsperar(NomeArquivo : String) : Boolean;
+    function ExecutarEsperarEnviar(NomeArquivo : String; mLog: TMemo) : Boolean;
     procedure CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
   public
-    procedure configurarHD;
+    constructor Create;
+    destructor Destroy; Override;
+
+    procedure configurarHD(mLog:TMemo);
     procedure configurarDB;
     procedure moverArquivos;
     procedure instalarProgramas(gauge: TGauge);
     procedure criarAtalhos;
 
-    function validarInstalacao(identificador, tecnico, cod: string):boolean;
+    function validarInstalacao(identificador, tecnico, cod: string): Integer;
   end;
 
 implementation
@@ -37,17 +42,17 @@ var
   sCaminho, sExe: string;
 begin
   try
-  sCaminho := 'E:\Desenvolvimento\Componentes\INSTALADOR\G10 '+
-              'Sistemas [Vers„o 06 - 2019] - Postgres 11\setup\SGC\Utilitarios\';
+    sCaminho := 'E:\Desenvolvimento\Componentes\INSTALADOR\G10 '+
+                'Sistemas [Vers√£o 06 - 2019] - Postgres 11\setup\SGC\Utilitarios\';
 
-  sExe := 'postgresql-11.3-1-windows-x64.exe';
+    sExe := 'postgresql-11.3-1-windows-x64.exe';
 
-  frmInstalador.Visible := false;
+    frmInstalador.Visible := False;
 
-  ExecutarEEsperar(sCaminho+sExe);
+    ExecutarEEsperar(sCaminho+sExe);
   except
     frmInstalador.Visible := true;
-    Application.MessageBox('N„o foi possÌvel instalar o ''postgresql-11.3-1-windows-x64'' ', 'ERRO!', MB_ICONERROR + MB_OK);
+    Application.MessageBox('N√£o foi poss√≠vel instalar o ''postgresql-11.3-1-windows-x64'' ', 'ERRO!', MB_ICONERROR + MB_OK);
   end;
   frmInstalador.Visible := true;
 end;
@@ -58,31 +63,25 @@ begin
   execConfigPostgresql;
 end;
 
-procedure TFuncoes.configurarHD;
+procedure TFuncoes.configurarHD(mLog:TMemo);
 begin
-  criarBat;
+  try
+    criarBat;
 
-  if FileExists('C:\script.bat') then
-  begin
-    if ExecutarEEsperar('C:\script.bat') then
-    begin
-      DeleteFile('C:\script.bat');
+    if FileExists('C:\particionaHD.bat') then
+      ExecutarEsperarEnviar('C:\particionaHD.bat',mLog)
 
-      if FileExists('C:\particaoOK.txt') then
-      begin
-        Application.MessageBox('PartiÁ„o - OK','SUCESSO!',mb_Ok+mb_IconExclamation);
-        DeleteFile('C:\particaoOK.txt');
-      end;
+  finally
+    if FileExists('C:\output.txt') then
+      mLog.Lines.LoadFromFile('C:\output.txt');
 
-      if FileExists('C:\particaoERROG.txt') then
-      begin
-        Application.MessageBox('PartiÁ„o - FALHA','FALHA!',mb_Ok+mb_IconExclamation);
-        DeleteFile('C:\particaoERROG.txt');
-      end;
-    end;
-  end else
-    raise Exception.Create('Script n„o criado!');
+    DeleteFile('C:\particionaHD.bat');
+    DeleteFile('C:\particaoOK.txt');
+    DeleteFile('C:\particaoERROG.txt');
+    DeleteFile('C:\output.txt');
+  end
 end;
+
 
 procedure TFuncoes.configurarPostgresql;
 var
@@ -93,7 +92,7 @@ begin
   Writeln(bat, 'set PGUSER=postgres                                          ');
   Writeln(bat, 'set PGPASSWORD=info$g10112                                   ');
   Writeln(bat, 'C:\Program Files\PostgreSQL\11\bin\pg_restore.exe --host localhost   '+
-  '--port 5432 --username postgres --dbname db_sgc --verbose "E:\Desenvolvimento\Componentes\INSTALADOR\G10 Sistemas [Vers„o 06 - 2019] - Postgres 11\setup\db_sgc.backup"');
+  '--port 5432 --username postgres --dbname db_sgc --verbose "E:\Desenvolvimento\Componentes\INSTALADOR\G10 Sistemas [Vers√£o 06 - 2019] - Postgres 11\setup\db_sgc.backup"');
 
   CloseFile(bat);
 end;
@@ -102,66 +101,88 @@ procedure TFuncoes.criarAtalhos;
 var
   path : string;
 begin
-    CreateShortcut('C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Vers„o 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV\OS.exe','','C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Vers„o 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV', 'OS','');
+    CreateShortcut('C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Vers√£o 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV\OS.exe','','C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Vers√£o 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV', 'OS','');
 end;
 
 procedure TFuncoes.criarBat;
 var
-  F : TextFile;
+  bat : TextFile;
 begin
-  AssignFile(F, 'C:\script.bat');
-  Rewrite(F);
-  Writeln(F, 'REM V0.2                                                                            ');
-  Writeln(F, '@echo off                                                                           ');
-  Writeln(F, 'cls                                                                                 ');
-  Writeln(F, 'SET disco=0                                                                         ');
-  Writeln(F, 'SET particao=1                                                                      ');
-  Writeln(F, 'echo Testando Disco: %disco% .PartiÁ„o: %particao%                                  ');
-  Writeln(F, ':construction                                                                       ');
-  Writeln(F, 'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                  ');
-  Writeln(F, 'echo select disk %disco% > C:\scriptdisk.txt                                        ');
-  Writeln(F, 'echo select partition %particao% >> C:\scriptdisk.txt                               ');
-  Writeln(F, 'echo shrink desired=300 minimum=300 >> C:\scriptdisk.txt                            ');
-  Writeln(F, 'echo create partition primary size=300 >> C:\scriptdisk.txt                         ');
-  Writeln(F, 'echo assign letter=X >> C:\scriptdisk.txt                                           ');
-  Writeln(F, 'echo format fs=ntfs label="G10DB" quick >> C:\scriptdisk.txt                        ');
-  Writeln(F, 'echo exit >> C:\scriptdisk.txt                                                      ');
-  Writeln(F, 'if not exist X:\ (                                                                  ');
-  Writeln(F, ':particao                                                                           ');
-  Writeln(F, 'pushd C:\                                                                           ');
-  Writeln(F, 'diskpart /s C:\scriptdisk.txt > logfile.txt                                         ');
-  Writeln(F, 'echo ESSE AQUI! %errorlevel%                                                        ');
-  Writeln(F, 'if errorlevel == 0 (                                                                ');
-  Writeln(F, 'goto okz                                                                            ');
-  Writeln(F, ') else (                                                                            ');
-  Writeln(F, 'SET /a particao += 1                                                                ');
-  Writeln(F, 'if %particao% GTR 5 goto particaoERROR                                              ');
-  Writeln(F, 'echo TESTANTO PARTICAO %particao%                                                   ');
-  Writeln(F, 'goto construction                                                                   ');
-  Writeln(F, ')                                                                                   ');
-  Writeln(F, ':particaoERROR                                                                      ');
-  Writeln(F, 'echo NAO FOI POSSIVEL ENCONTRAR UMA PARTICAO UTILIZAVEL NO DISCO %disco%            ');
-  Writeln(F, 'SET /a disco += 1                                                                   ');
-  Writeln(F, 'SET /a particao = 1                                                                 ');
-  Writeln(F, 'REM ## VERIFICA SE O DISCO JA … MAIOR QUE 3, SE FOR, NAO ENVIA PARA contruction e   ');
-  Writeln(F, 'REM SEGUE COM O SCRIPT. GERANDO O ARQUIVO particaoERRO E SAINDO DO PROGRAMA ##      ');
-  Writeln(F, 'if %disco% LEQ 3 goto construction                                                  ');
-  Writeln(F, 'echo ERRO > C:\particaoERRO.txt                                                     ');
-  Writeln(F, 'goto fim                                                                            ');
-  Writeln(F, ':okz                                                                                ');
-  Writeln(F, 'echo PARTICAO CRIADA COM SUCESSO.                                                   ');
-  Writeln(F, 'echo OK > C:\particaoOK.txt                                                         ');
-  Writeln(F, 'goto fim                                                                            ');
-  Writeln(F, ') else (                                                                            ');
-  Writeln(F, 'echo JA EXISTE A PARTICAO G:                                                        ');
-  Writeln(F, 'echo.                                                                               ');
-  Writeln(F, 'echo EXISTEG > C:\particaoERROG.txt                                                 ');
-  Writeln(F, ')                                                                                   ');
-  Writeln(F, ':fim                                                                                ');
-  Writeln(F, 'echo CONCLUIDO!                                                                     ');
-  Write(F,   'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                  ');
+  try
+    AssignFile(bat, 'C:\particionaHD.bat');
+    Rewrite(bat);
+    Writeln(bat, '@echo off');
+    Writeln(bat, 'cls');
+    Writeln(bat, 'SET disco=0');
+    Writeln(bat, 'SET particao=1');
+    Writeln(bat, '>output.txt (');
+    Writeln(bat, 'echo PARTICIONAR HD');
+    Writeln(bat, ')');
+    Writeln(bat, '>>output.txt (');
+    Writeln(bat, 'echo criando SCRIPT');
+    Writeln(bat, ')');
+    Writeln(bat, ':construction');
+    Writeln(bat, 'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt');
+    Writeln(bat, 'echo select disk %disco% > C:\scriptdisk.txt');
+    Writeln(bat, 'echo select partition %particao% >> C:\scriptdisk.txt');
+    Writeln(bat, 'echo shrink desired=300 minimum=300 >> C:\scriptdisk.txt');
+    Writeln(bat, 'echo create partition primary size=300 >> C:\scriptdisk.txt');
+    Writeln(bat, 'echo assign letter=X >> C:\scriptdisk.txt');
+    Writeln(bat, 'echo format fs=ntfs label="G10DB" quick >> C:\scriptdisk.txt');
+    Writeln(bat, 'echo exit >> C:\scriptdisk.txt');
+    Writeln(bat, 'if not exist X:\ (');
+    Writeln(bat, ':particao');
+    Writeln(bat, 'pushd C:\');
+    Writeln(bat, '>>output.txt (');
+    Writeln(bat, 'echo testando SCRIPT na particao: %particao%');
+    Writeln(bat, ')');
+    Writeln(bat, 'diskpart /s C:\scriptdisk.txt');
+    Writeln(bat, 'echo resultado: %errorlevel%');
+    Writeln(bat, 'if errorlevel == 0 (');
+    Writeln(bat, '>>output.txt (');
+    Writeln(bat, 'echo SCRIPT criado');
+    Writeln(bat, 'echo SCRIPT executado!');
+    Writeln(bat, ')');
+    Writeln(bat, 'goto okz');
+    Writeln(bat, ') else (');
+    Writeln(bat, 'SET /a particao += 1');
+    Writeln(bat, 'if %particao% GTR 5 goto particaoERROR');
+    Writeln(bat, 'goto construction');
+    Writeln(bat, ')');
+    Writeln(bat, ':particaoERROR');
+    Writeln(bat, 'echo NAO FOI POSSIVEL ENCONTRAR UMA PARTICAO UTILIZAVEL NO DISCO %disco%');
+    Writeln(bat, 'SET /a disco += 1');
+    Writeln(bat, 'SET /a particao = 1');
+    Writeln(bat, 'REM ## VERIFICA SE O DISCO JA √â MAIOR QUE 3, SE FOR, NAO ENVIA PARA contruction e');
+    Writeln(bat, 'REM SEGUE COM O SCRIPT. GERANDO O ARQUIVO particaoERRO E SAINDO DO PROGRAMA ##');
+    Writeln(bat, 'if %disco% LEQ 3 goto construction');
+    Writeln(bat, 'echo ERRO > C:\particaoERRO.txt');
+    Writeln(bat, 'goto fim');
+    Writeln(bat, ':okz');
+    Writeln(bat, '>>output.txt (');
+    Writeln(bat, 'echo SUCESSO: Parti√ß√£o criada!');
+    Writeln(bat, ')');
+    Writeln(bat, 'echo OK > C:\particaoOK.txt');
+    Writeln(bat, 'goto fim');
+    Writeln(bat, ') else (');
+    Writeln(bat, 'echo FALHA: H√° parti√ß√£o com a letra G > C:\particaoERROG.txt');
+    Writeln(bat, ')');
+    Writeln(bat, ':fim');
+    Writeln(bat, '>>output.txt (');
+    Writeln(bat, 'echo CONCLUIDO!');
+    Writeln(bat, ')');
+    Write(bat,   'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt');
 
-  CloseFile(F);
+    CloseFile(bat);
+  except
+    raise Exception.Create('Script n√£o criado!');
+  end;
+end;
+
+destructor TFuncoes.Destroy;
+begin
+  dao.Free;
+  inherited;
 end;
 
 procedure TFuncoes.execConfigPostgresql;
@@ -174,6 +195,11 @@ begin
   finally
     DeleteFile('E:\configPostgresql.bat');
   end;
+end;
+
+constructor TFuncoes.Create;
+begin
+  dao := TDaoInstalador.Create;
 end;
 
 procedure TFuncoes.CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
@@ -212,7 +238,7 @@ begin
   gauge.Progress := 0;
   gauge.MaxValue := 3;
 
-  path := 'D:\INSTALADOR\G10 Sistemas [Vers„o 06 - 2019] - Postgres 11\setup\';
+  path := 'D:\INSTALADOR\G10 Sistemas [Vers√£o 06 - 2019] - Postgres 11\setup\';
 
   programa := 'PgManagerFullSetup.exe';
   ExecutarEEsperar(path+programa);
@@ -243,28 +269,41 @@ begin
   SHFileOperation(SH);
 end;
 
-function TFuncoes.validarInstalacao(identificador, tecnico, cod: string):boolean;
+function TFuncoes.validarInstalacao(identificador, tecnico, cod: string):Integer;
 var
   codigo: integer;
+  ano: string;
+  retorno: integer;
 begin
-  codigo := (DayOf(now)*MonthOf(now)+YearOf(now)) * StrToInt(identificador);
+  retorno := -1;
+
+  ano    := copy(IntToStr(YearOf(now)), 3, 2);
+  codigo := (DayOf(now)*MonthOf(now)+ StrToInt(ano)) * StrToInt(copy(identificador, 0, 4));
 
   try
-    if not daoInstalador.getIdentificador(StrToInt(identificador)) then
-      raise Exception.Create('Cliente n„o validado');
+    if not dao.getIdentificador(identificador) then
+    begin
+      retorno := 1;
+      raise Exception.Create('Cliente n√£o validado');
+    end;
 
-    if not daoInstalador.getTecnico(StrToInt(tecnico)) then
-      raise Exception.Create('TÈcnico n„o validado');
+    if not dao.getIdentificador(tecnico) then
+    begin
+      retorno:= 2;
+      raise Exception.Create('T√©cnico n√£o validado');
+    end;
 
-    if not codigo = StrToInt(cod) then
-      raise Exception.Create('CÛdigo inv·lido');
-
-    Result := true;
+    if not (codigo = StrToInt(cod)) then
+    begin
+      retorno := 3;
+      raise Exception.Create('C√≥digo de verifica√ß√£o incorreto!');
+    end;
+    Result := 0;
   except
     on E: Exception do
     begin
-      Application.MessageBox(PChar(E.Message), 'AtenÁ„o', MB_ICONINFORMATION + MB_OK);
-      Result := false;
+      Application.MessageBox(PChar(E.Message), 'Aten√ß√£o', MB_ICONINFORMATION + MB_OK);
+      Result := retorno;
     end;
   end;
 end;
@@ -295,6 +334,46 @@ begin
 
     Result := True;
   end else
+    Result := False;
+end;
+
+function TFuncoes.ExecutarEsperarEnviar(NomeArquivo : String; mLog : TMemo) : Boolean;
+var
+  shell: TShellExecuteInfo;
+  codigoSaida: DWORD;
+begin
+  FillChar(shell, SizeOf(shell), 0) ;
+  shell.cbSize := SizeOf(TShellExecuteInfo) ;
+
+  with shell do
+  begin
+    fMask  := SEE_MASK_NOCLOSEPROCESS;
+    Wnd    := Application.Handle;
+    lpVerb := nil;
+    lpFile := PChar(NomeArquivo);
+    nShow  := SW_SHOWNORMAL;
+  end;
+
+  if ShellExecuteEx(@shell) then
+  begin
+    repeat
+      if FileExists('C:\output.txt') then
+      begin
+        Sleep(500);
+        mLog.Lines.LoadFromFile('C:\output.txt');
+      end;
+      if FileExists('C:\particaoERROG.txt') then
+      begin
+        mLog.Lines.LoadFromFile('C:\particaoERROG.txt');
+      end;
+
+      Application.ProcessMessages;
+      GetExitCodeProcess(shell.hProcess, codigoSaida);
+    until not(codigoSaida = STILL_ACTIVE);
+
+    Result := True;
+  end
+  else
     Result := False;
 end;
 

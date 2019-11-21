@@ -1,4 +1,4 @@
-object ValidarCliente: TValidarCliente
+object frmValidarCliente: TfrmValidarCliente
   Left = 245
   Top = 108
   BorderStyle = bsDialog
@@ -14,8 +14,8 @@ object ValidarCliente: TValidarCliente
   object pnValidarCliente: TPanel
     Left = 0
     Top = 0
-    Width = 449
-    Height = 216
+    Width = 421
+    Height = 227
     Align = alClient
     BevelOuter = bvNone
     Color = clMoneyGreen
@@ -408,7 +408,7 @@ object ValidarCliente: TValidarCliente
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         ParentFont = False
-        TabOrder = 3
+        TabOrder = 0
         OnClick = btnValidarClick
       end
       object btnCancelar: TButton
@@ -426,6 +426,36 @@ object ValidarCliente: TValidarCliente
         TabOrder = 4
         OnClick = btnCancelarClick
       end
+    end
+    object edtCNPJ: TEdit
+      Left = 145
+      Top = 87
+      Width = 223
+      Height = 21
+      MaxLength = 18
+      TabOrder = 1
+      Text = '63280838000104'
+      OnExit = edtCNPJExit
+      OnKeyPress = edtCNPJKeyPress
+    end
+    object edtCodigo: TEdit
+      Left = 145
+      Top = 127
+      Width = 223
+      Height = 21
+      TabOrder = 2
+      Text = '1582000'
+    end
+    object edtCPF: TEdit
+      Left = 145
+      Top = 46
+      Width = 223
+      Height = 21
+      MaxLength = 14
+      TabOrder = 0
+      Text = '37799067837'
+      OnExit = edtCPFExit
+      OnKeyPress = edtCPFKeyPress
     end
   end
 end

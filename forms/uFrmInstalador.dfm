@@ -3687,5 +3687,24 @@ object frmInstalador: TfrmInstalador
       ScrollBars = ssVertical
       TabOrder = 0
     end
+    object mLog: TMemo
+      Left = 8
+      Top = 234
+      Width = 347
+      Height = 207
+      Lines.Strings = (
+        'mLog')
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object mScript: TMemo
+      Left = 264
+      Top = 185
+      Width = 89
+      Height = 43
+      Lines.Strings = (
+        'mScript')
+      TabOrder = 1
+    end
   end
 end

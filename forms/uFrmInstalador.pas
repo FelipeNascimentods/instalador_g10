@@ -26,12 +26,13 @@ type
     Image1: TImage;
     Bevel: TBevel;
     lblTitulo: TLabel;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnInstalarClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure SpeedButton2Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
     funcoes: TFuncoes;
+    validarCliente: TfrmValidarCliente;
   public
     procedure instalar;
     procedure controleShow;
@@ -48,8 +49,8 @@ implementation
 
 procedure TfrmInstalador.controleFinalizado;
 begin
-  lblTitulo.Caption      := 'Instalação Finalizada';
-  lblProgressBar.Caption := 'Concluído';
+  lblTitulo.Caption      := 'Instalaï¿½ï¿½o Finalizada';
+  lblProgressBar.Caption := 'Concluï¿½do';
 end;
 
 procedure TfrmInstalador.controleInstalar;
@@ -68,14 +69,29 @@ end;
 
 procedure TfrmInstalador.FormCreate(Sender: TObject);
 var
-  validarCliente : TValidarCliente;
+  validarCliente : TfrmValidarCliente;
 begin
-  validarCliente := TValidarCliente.Create(self);
-  frmInstalador.Visible := false;
+  try
+    funcoes.Free;
+    validarCliente.Free;
+  finally
+    Action := caFree;
+    frmInstalador := nil;
+  end;
+end;
+
+procedure TfrmInstalador.FormShow(Sender: TObject);
+begin
+  funcoes := TFuncoes.Create;
+  validarCliente := TfrmValidarCliente.Create(self);
   validarCliente.ShowModal;
 
-  frmInstalador.Visible := true;
-
+  if validarCliente.getVerificacao then
+  begin
+    mLog.Clear;
+  end
+  else
+    Application.Terminate;
 end;
 
 procedure TfrmInstalador.FormShow(Sender: TObject);
