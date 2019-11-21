@@ -17,7 +17,9 @@ type
     pnValidarCliente: TPanel;
     imgVerificacao: TImage;
     btnValidar: TButton;
+    btnCancelar: TButton;
     procedure btnValidarClick(Sender: TObject);
+    procedure btnCancelarClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -30,6 +32,11 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TValidarCliente.btnCancelarClick(Sender: TObject);
+begin
+  Application.Terminate;
+end;
 
 procedure TValidarCliente.btnValidarClick(Sender: TObject);
 begin
