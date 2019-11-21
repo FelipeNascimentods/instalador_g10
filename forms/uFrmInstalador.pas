@@ -29,7 +29,7 @@ type
     procedure FormShow(Sender: TObject);
   private
     funcoes: TFuncoes;
-    validarCliente: TValidarCliente;
+    validarCliente: TfrmValidarCliente;
   public
     procedure instalar;
   end;
@@ -55,7 +55,7 @@ end;
 procedure TfrmInstalador.FormShow(Sender: TObject);
 begin
   funcoes := TFuncoes.Create;
-  validarCliente := TValidarCliente.Create(self);
+  validarCliente := TfrmValidarCliente.Create(self);
   validarCliente.ShowModal;
 
   if validarCliente.getVerificacao then

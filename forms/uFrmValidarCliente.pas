@@ -7,7 +7,7 @@ uses Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Forms,
   funcoes, MaskUtils;
 
 type
-  TValidarCliente = class(TForm)
+  TfrmValidarCliente = class(TForm)
     lblCPF: TLabel;
     lblCNPJ: TLabel;
     lblCodigo: TLabel;
@@ -36,13 +36,13 @@ type
   end;
 
 var
-  ValidarCliente: TValidarCliente;
+  frmValidarCliente: TfrmValidarCliente;
 
 implementation
 
 {$R *.dfm}
 
-procedure TValidarCliente.btnValidarClick(Sender: TObject);
+procedure TfrmValidarCliente.btnValidarClick(Sender: TObject);
 begin
   try
     if edtCPF.Text = '' then
@@ -83,7 +83,7 @@ begin
 
 end;
 
-function TValidarCliente.deleteCaracter(texto: string): string;
+function TfrmValidarCliente.deleteCaracter(texto: string): string;
 begin
   Delete(texto, ansipos('.',texto),1);
   Delete(texto, ansipos('.',texto),1);
@@ -92,7 +92,7 @@ begin
   result := texto;
 end;
 
-procedure TValidarCliente.edtCNPJExit(Sender: TObject);
+procedure TfrmValidarCliente.edtCNPJExit(Sender: TObject);
 begin
   if (edtCNPJ.Text <> '') and (length(edtCNPJ.Text) >= 14) then
   begin
@@ -101,7 +101,7 @@ begin
   end;
 end;
 
-procedure TValidarCliente.edtCNPJKeyPress(Sender: TObject; var Key: Char);
+procedure TfrmValidarCliente.edtCNPJKeyPress(Sender: TObject; var Key: Char);
 begin
   if not (Key in ['0'..'9', #8]) then Abort;
 
@@ -133,7 +133,7 @@ begin
   end;
 end;
 
-procedure TValidarCliente.edtCPFExit(Sender: TObject);
+procedure TfrmValidarCliente.edtCPFExit(Sender: TObject);
 begin
   if (edtCPF.Text <> '') and (length(edtCPF.Text) >= 11) then
   begin
@@ -142,9 +142,10 @@ begin
   end;
 end;
 
-procedure TValidarCliente.edtCPFKeyPress(Sender: TObject; var Key: Char);
+procedure TfrmValidarCliente.edtCPFKeyPress(Sender: TObject; var Key: Char);
 begin
-   if not (Key in ['0'..'9',#8]) then Abort;
+  //if not ((Key = #86) and (Shift = [ssCtrl])) then
+    if not (Key in ['0'..'9',#8]) then Abort;
 
    if key <> #8 then
    begin
@@ -168,14 +169,14 @@ begin
    end;
 end;
 
-procedure TValidarCliente.FormCreate(Sender: TObject);
+procedure TfrmValidarCliente.FormCreate(Sender: TObject);
 begin
   funcoes := TFuncoes.Create;
   verificacao := false;
 
 end;
 
-function TValidarCliente.getVerificacao: boolean;
+function TfrmValidarCliente.getVerificacao: boolean;
 begin
   result := verificacao;
 end;

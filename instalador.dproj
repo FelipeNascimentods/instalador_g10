@@ -104,7 +104,7 @@
         </DCCReference>
         <DCCReference Include="classes\funcoes.pas"/>
         <DCCReference Include="forms\uFrmValidarCliente.pas">
-            <Form>ValidarCliente</Form>
+            <Form>frmValidarCliente</Form>
         </DCCReference>
         <DCCReference Include="forms\uDm.pas">
             <Form>dm</Form>

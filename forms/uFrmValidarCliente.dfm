@@ -1,4 +1,4 @@
-object ValidarCliente: TValidarCliente
+object frmValidarCliente: TfrmValidarCliente
   Left = 242
   Top = 103
   BorderStyle = bsToolWindow
@@ -26,10 +26,6 @@ object ValidarCliente: TValidarCliente
     Color = 15315289
     ParentBackground = False
     TabOrder = 0
-    ExplicitLeft = -32
-    ExplicitTop = -152
-    ExplicitWidth = 754
-    ExplicitHeight = 469
     object imgVerificacao: TImage
       Left = 32
       Top = 73
