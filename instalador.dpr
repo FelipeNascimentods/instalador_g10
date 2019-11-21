@@ -12,8 +12,8 @@ uses
 
 begin
   Application.Initialize;
-  Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TfrmInstalador, frmInstalador);
+  //Application.MainFormOnTaskbar := True;
   Application.CreateForm(Tdm, dm);
+  Application.CreateForm(TfrmInstalador, frmInstalador);
   Application.Run;
 end.

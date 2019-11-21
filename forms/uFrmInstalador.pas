@@ -25,8 +25,8 @@ type
     barraDeProgresso: TGauge;
     mLog: TMemo;
     procedure btnInstalarClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
   private
     funcoes: TFuncoes;
     validarCliente: TValidarCliente;
@@ -52,17 +52,14 @@ begin
   end;
 end;
 
-procedure TfrmInstalador.FormCreate(Sender: TObject);
+procedure TfrmInstalador.FormShow(Sender: TObject);
 begin
   funcoes := TFuncoes.Create;
   validarCliente := TValidarCliente.Create(self);
-
-  frmInstalador.Visible := false;
-
   validarCliente.ShowModal;
+
   if validarCliente.getVerificacao then
   begin
-    frmInstalador.Visible := true;
     mLog.Clear;
   end
   else

@@ -13,8 +13,9 @@ object frmInstalador: TfrmInstalador
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
+  Visible = True
   OnClose = FormClose
-  OnCreate = FormCreate
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object pnBot: TPanel
