@@ -24,6 +24,7 @@ type
     procedure edtCNPJExit(Sender: TObject);
     procedure edtCPFKeyPress(Sender: TObject; var Key: Char);
     procedure edtCNPJKeyPress(Sender: TObject; var Key: Char);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
   private
     funcoes :Tfuncoes;
     verificacao: boolean;
@@ -173,6 +174,12 @@ begin
   funcoes := TFuncoes.Create;
   verificacao := false;
 
+end;
+
+procedure TValidarCliente.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    btnValidarClick(self);
 end;
 
 function TValidarCliente.getVerificacao: boolean;

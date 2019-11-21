@@ -11,9 +11,11 @@ object ValidarCliente: TValidarCliente
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  KeyPreview = True
   OldCreateOrder = False
   Position = poScreenCenter
   OnCreate = FormCreate
+  OnKeyPress = FormKeyPress
   PixelsPerInch = 96
   TextHeight = 13
   object pnValidarCliente: TPanel
@@ -376,6 +378,7 @@ object ValidarCliente: TValidarCliente
       Width = 223
       Height = 21
       TabOrder = 2
+      Text = '1582000'
     end
     object edtCPF: TEdit
       Left = 145
