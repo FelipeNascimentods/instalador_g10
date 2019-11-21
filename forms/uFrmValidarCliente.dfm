@@ -1,4 +1,4 @@
-object ValidarCliente: TValidarCliente
+object frmValidarCliente: TfrmValidarCliente
   Left = 242
   Top = 103
   BorderStyle = bsToolWindow

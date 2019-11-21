@@ -13,8 +13,9 @@ object frmInstalador: TfrmInstalador
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
+  Visible = True
   OnClose = FormClose
-  OnCreate = FormCreate
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object pnBot: TPanel
@@ -206,6 +207,15 @@ object frmInstalador: TfrmInstalador
         'mLog')
       ReadOnly = True
       TabOrder = 0
+    end
+    object mScript: TMemo
+      Left = 264
+      Top = 185
+      Width = 89
+      Height = 43
+      Lines.Strings = (
+        'mScript')
+      TabOrder = 1
     end
   end
 end
