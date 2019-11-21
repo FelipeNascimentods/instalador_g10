@@ -4,7 +4,7 @@ uses
   Vcl.Forms,
   uFrmInstalador in 'forms\uFrmInstalador.pas' {frmInstalador},
   funcoes in 'classes\funcoes.pas',
-  uFrmValidarCliente in 'forms\uFrmValidarCliente.pas' {ValidarCliente},
+  uFrmValidarCliente in 'forms\uFrmValidarCliente.pas' {frmValidarCliente},
   uDm in 'forms\uDm.pas' {dm: TDataModule},
   daoInstalador in 'dao\daoInstalador.pas';
 
