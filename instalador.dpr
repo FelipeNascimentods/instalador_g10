@@ -11,8 +11,8 @@ uses
 {$R *.res}
 
 begin
-  Application.Initialize;
-  Application.MainFormOnTaskbar := True;
+Application.Initialize;
+  //Application.MainFormOnTaskbar := True;
   Application.CreateForm(TdmPrincipal, dmPrincipal);
   Application.CreateForm(TfrmInstalador, frmInstalador);
   Application.Run;
