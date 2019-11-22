@@ -5,12 +5,11 @@ object dmPrincipal: TdmPrincipal
   object ZConnection: TZConnection
     ControlsCodePage = cCP_UTF16
     Catalog = ''
-    Connected = True
     HostName = 'localhost'
     Port = 5432
-    Database = 'db_sgc_GALEGO'
-    User = 'estudo'
-    Password = 'estudo'
+    Database = 'db_sgc'
+    User = 'postgres'
+    Password = 'acessog10'
     Protocol = 'postgresql'
     Left = 64
     Top = 32

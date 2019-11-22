@@ -20,12 +20,17 @@ type
     lblTitulo: TLabel;
     Memo: TMemo;
     pnLeft: TPanel;
-    cbxHD: TCheckBox;
-    cbxBanco: TCheckBox;
-    cbxArquivo: TCheckBox;
-    cbxAtalho: TCheckBox;
     Image1: TImage;
-    cbxProgramas: TCheckBox;
+    cbxCriandoParticao: TImage;
+    lvlCriandoParticao: TLabel;
+    lblConfigurandoBanco: TLabel;
+    lblCopiandoArquivos: TLabel;
+    lblInstalandoProgramas: TLabel;
+    lblCriandoAtalhos: TLabel;
+    cbxConfigurandoBanco: TImage;
+    cbxCopiandoArquivos: TImage;
+    cbxInstalandoProgramas: TImage;
+    cbxCriandoAtalhos: TImage;
     procedure btnInstalarClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
@@ -76,19 +81,16 @@ end;
 
 procedure TfrmInstalador.instalar;
 begin
-  btnInstalar.Enabled := false;
-  btnCancelar.Enabled := false;
+  btnInstalar.Enabled := False;
+  btnCancelar.Enabled := False;
 
   EnableMenuItem(GetSystemMenu(handle, False ),SC_CLOSE, MF_BYCOMMAND or MF_GRAYED );
 
-  {cbxHD.Enabled := true;
-  if funcoes.configurarHD(Memo) then
-    cbxHD.Checked := True;}
+  {if funcoes.configurarHD(Memo, barraDeProgresso) then
+    cbxCriandoParticao.Visible := True;}
 
-  cbxProgramas.Enabled := true;
-  cbxProgramas.Font.Color := clWhite;
   funcoes.instalarProgramas(barraDeProgresso, Memo);
-  cbxProgramas.Checked := True;
+  cbxInstalandoProgramas.Visible := True;
 
   EnableMenuItem(GetSystemMenu(handle, False ), SC_CLOSE, MF_BYCOMMAND or MF_ENABLED );
 end;
