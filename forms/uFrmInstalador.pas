@@ -86,8 +86,8 @@ begin
 
   EnableMenuItem(GetSystemMenu(handle, False ),SC_CLOSE, MF_BYCOMMAND or MF_GRAYED );
 
-  {if funcoes.configurarHD(Memo, barraDeProgresso) then
-    cbxCriandoParticao.Visible := True;}
+  if funcoes.configurarHD(Memo, barraDeProgresso) then
+    cbxCriandoParticao.Visible := True;
 
   funcoes.instalarProgramas(barraDeProgresso, Memo);
   cbxInstalandoProgramas.Visible := True;

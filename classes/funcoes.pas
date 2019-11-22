@@ -71,7 +71,10 @@ begin
     if FileExists('C:\particionaHD.bat') then
     begin
       if ExecutarEEsperar('C:\particionaHD.bat') then
-        gauge.AddProgress(1)
+      begin
+        memo.Lines.Add('Log gerado em C:\');
+        gauge.AddProgress(1);
+      end
       else
         raise Exception.Create('Script não executado!')
     end;

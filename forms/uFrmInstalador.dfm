@@ -931,8 +931,8 @@ object frmInstalador: TfrmInstalador
     object lblConfigurandoBanco: TLabel
       Left = 31
       Top = 185
-      Width = 161
-      Height = 12
+      Width = 145
+      Height = 13
       Caption = 'Configurando Banco de Dados'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWhite

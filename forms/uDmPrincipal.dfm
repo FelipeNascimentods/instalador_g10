@@ -4,7 +4,9 @@ object dmPrincipal: TdmPrincipal
   Width = 268
   object ZConnection: TZConnection
     ControlsCodePage = cCP_UTF16
+    AutoEncodeStrings = True
     Catalog = ''
+    Connected = True
     HostName = 'localhost'
     Port = 5432
     Database = 'db_sgc'
