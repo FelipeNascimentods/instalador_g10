@@ -20,12 +20,12 @@ type
     lblTitulo: TLabel;
     Memo: TMemo;
     pnLeft: TPanel;
-    Image1: TImage;
     cbxHD: TCheckBox;
     cbxBanco: TCheckBox;
     cbxArquivo: TCheckBox;
-    cbxProgramas: TCheckBox;
     cbxAtalho: TCheckBox;
+    Image1: TImage;
+    cbxProgramas: TCheckBox;
     procedure btnInstalarClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
@@ -86,6 +86,7 @@ begin
     cbxHD.Checked := True;}
 
   cbxProgramas.Enabled := true;
+  cbxProgramas.Font.Color := clWhite;
   funcoes.instalarProgramas(barraDeProgresso, Memo);
   cbxProgramas.Checked := True;
 
