@@ -30,6 +30,7 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     funcoes: TFuncoes;
     validarCliente: TfrmValidarCliente;
@@ -55,9 +56,13 @@ begin
   end;
 end;
 
+procedure TfrmInstalador.FormCreate(Sender: TObject);
+begin
+   funcoes := TFuncoes.Create;
+end;
+
 procedure TfrmInstalador.FormShow(Sender: TObject);
 begin
-  funcoes := TFuncoes.Create;
   validarCliente := TfrmValidarCliente.Create(self);
   validarCliente.ShowModal;
 
@@ -71,9 +76,10 @@ end;
 
 procedure TfrmInstalador.instalar;
 begin
-  funcoes := TFuncoes.Create;
-  if funcoes.configurarHD(Memo) then
-    cbxHD.Checked := True;
+  {if funcoes.configurarHD(Memo) then
+    cbxHD.Checked := True;}
+
+  funcoes.instalarProgramas(barraDeProgresso, Memo);
 end;
 
 procedure TfrmInstalador.btnCancelarClick(Sender: TObject);

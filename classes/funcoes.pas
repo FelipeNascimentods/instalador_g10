@@ -10,6 +10,7 @@ type
 
   private
     dao: TDaoInstalador;
+    diretorio: string;
 
     procedure configurarPostgresql;
     procedure execConfigPostgresql;
@@ -25,7 +26,7 @@ type
     function configurarHD(memo:TMemo) : boolean;
     procedure configurarDB;
     procedure moverArquivos;
-    procedure instalarProgramas(gauge: TGauge);
+    procedure instalarProgramas(gauge: TGauge; memo: TMemo);
     procedure criarAtalhos;
 
     function validarInstalacao(identificador, tecnico, cod: string): Integer;
@@ -38,21 +39,14 @@ implementation
 uses uFrmInstalador;
 
 procedure TFuncoes.instalarPostegresql;
-var
-  sCaminho, sExe: string;
 begin
   try
-    sCaminho := 'E:\Desenvolvimento\Componentes\INSTALADOR\G10 '+
-                'Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\Utilitarios\';
-
-    sExe := 'postgresql-11.3-1-windows-x64.exe';
-
     frmInstalador.Visible := False;
 
-    ExecutarEEsperar(sCaminho+sExe);
+    ExecutarEEsperar(diretorio + 'programas\postgres.exe');
   except
     frmInstalador.Visible := true;
-    Application.MessageBox('Não foi possível instalar o ''postgresql-11.3-1-windows-x64'' ', 'ERRO!', MB_ICONERROR + MB_OK);
+    Application.MessageBox('Não foi possível instalar o ''postgres'' ', 'ERRO!', MB_ICONERROR + MB_OK);
   end;
   frmInstalador.Visible := true;
 end;
@@ -88,7 +82,6 @@ begin
   DeleteFile('C:\particaoOK.txt');
   DeleteFile('C:\particaoERROG.txt');
   DeleteFile('C:\output.txt');
-
 end;
 
 
@@ -107,8 +100,6 @@ begin
 end;
 
 procedure TFuncoes.criarAtalhos;
-var
-  path : string;
 begin
     CreateShortcut('C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV\OS.exe','','C:\Users\01\Desktop\Arquivos\INSTALADOR\G10 Sistemas [Versão 06 - 2019] - Postgres 11\setup\SGC\SGC-PDV', 'OS','');
 end;
@@ -209,6 +200,7 @@ end;
 constructor TFuncoes.Create;
 begin
   dao := TDaoInstalador.Create;
+  diretorio := Copy(ExtractFileDir(Application.ExeName), 1, Pos('\Win32', ExtractFileDir(Application.ExeName)));
 end;
 
 procedure TFuncoes.CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
@@ -240,25 +232,31 @@ begin
   MyReg.Free;
 end;
 
-procedure TFuncoes.instalarProgramas(gauge: TGauge);
-var
-  path, programa: string;
+procedure TFuncoes.instalarProgramas(gauge: TGauge; memo: TMemo);
 begin
   gauge.Progress := 0;
-  gauge.MaxValue := 3;
+  gauge.MaxValue := 5;
 
-  path := 'D:\INSTALADOR\G10 Sistemas [Versão 06 - 2019] - Postgres 11\setup\';
+  memo.Lines.Add('-- Instalando Programas de Terceiros --');
 
-  programa := 'PgManagerFullSetup.exe';
-  ExecutarEEsperar(path+programa);
+  memo.Lines.Add('Instalando pgManager');
+  ExecutarEEsperar(diretorio + 'programas\pgManager.msi');
   gauge.AddProgress(1);
 
-  programa := 'AnyDesk.exe';
-  ExecutarEEsperar(path+programa);
+  memo.Lines.Add('Instalando AnyDesk');
+  ExecutarEEsperar(diretorio + 'programas\anyDesk.exe');
   gauge.AddProgress(1);
 
-  programa := 'FileZilla_3.16.1_win64-setup.exe';
-  ExecutarEEsperar(path+programa);
+  memo.Lines.Add('Instalando FileZilla');
+  ExecutarEEsperar(diretorio + 'programas\fileZilla.exe');
+  gauge.AddProgress(1);
+
+  memo.Lines.Add('Instalando TeamView');
+  ExecutarEEsperar(diretorio + 'programas\teamView.exe');
+  gauge.AddProgress(1);
+
+  memo.Lines.Add('Instalando WinRar');
+  ExecutarEEsperar(diretorio + 'programas\winRar.exe');
   gauge.AddProgress(1);
 end;
 
