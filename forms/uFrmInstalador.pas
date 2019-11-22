@@ -76,10 +76,13 @@ end;
 
 procedure TfrmInstalador.instalar;
 begin
-  {if funcoes.configurarHD(Memo) then
+  {cbxHD.Enabled := True;
+  if funcoes.configurarHD(Memo) then
     cbxHD.Checked := True;}
 
+  {cbxProgramas.Enabled := True;
   funcoes.instalarProgramas(barraDeProgresso, Memo);
+  cbxProgramas.Checked := True;}
 end;
 
 procedure TfrmInstalador.btnCancelarClick(Sender: TObject);
