@@ -3,7 +3,8 @@
 interface
 
 uses ShellAPI, Winapi.Windows, Vcl.Controls, Vcl.Forms, Vcl.Samples.Gauges,
-  ActiveX,SysUtils, IOUtils, Vcl.StdCtrls, ShlObj, ComObj, Registry, DateUtils, daoInstalador;
+  ActiveX,SysUtils, IOUtils, Vcl.StdCtrls, ShlObj, ComObj, Registry, DateUtils, daoInstalador,
+  Vcl.Grids;
 
 type
   TFuncoes = class
@@ -17,7 +18,6 @@ type
     procedure instalarPostegresql;
     function criarBat : Boolean;
     function ExecutarEEsperar(NomeArquivo : String) : Boolean;
-    function ExecutarEsperarEnviar(NomeArquivo : String; mLog: TMemo) : Boolean;
     procedure CreateShortcut(FileName, Parameters, InitialDir, ShortcutName, ShortcutFolder : String);
   public
     constructor Create;
@@ -63,41 +63,40 @@ begin
     gauge.Progress := 0;
     gauge.MaxValue := 3;
 
-    memo.Lines.Add('--- CRIANDO SCRIPT ---');
+    memo.Lines.Add('-- Criando Partição G:\ --');
+
     if criarBat then
-    begin
-      memo.Lines.Add('--- SCRIPT CRIADO ---');
       gauge.AddProgress(1);
-    end;
 
     if FileExists('C:\particionaHD.bat') then
     begin
-      if ExecutarEsperarEnviar('C:\particionaHD.bat',memo) then
+      if ExecutarEEsperar('C:\particionaHD.bat') then
         gauge.AddProgress(1)
       else
         raise Exception.Create('Script não executado!')
     end;
 
+    Result := True;
   except
     on E: Exception do
     begin
       Application.MessageBox(PChar(E.Message), 'Atenção', MB_ICONINFORMATION + MB_OK);
-      Result := false;
+      Result := False;
     end;
   end;
 
+  if FileExists('C:\particaoOK.txt') then
+    memo.Lines.Add('Partição criada!');
+
   if FileExists('C:\particaoERRO.txt') then
-    memo.Lines.LoadFromFile('C:\particaoERRO.txt');
+    memo.Lines.Add('Já existe partição G:\ ou o disco é maior que 3!');
 
-  if FileExists('C:\output.txt') then
-    memo.Lines.LoadFromFile('C:\output.txt');
-
-  memo.Lines.Add('--- DELETANDO ARQUIVOS ---');
+  memo.Lines.Add('Deletando arquivos');
   DeleteFile('C:\particionaHD.bat');
   DeleteFile('C:\particaoOK.txt');
-  DeleteFile('C:\particaoERROG.txt');
+  DeleteFile('C:\particaoERRO.txt');
   DeleteFile('C:\output.txt');
-  memo.Lines.Add('--- ARQUIVOS DELETADOS ---');
+  memo.Lines.Add('Arquivos deletados com sucesso!');
   memo.Lines.Add('');
 
   gauge.AddProgress(1);
@@ -134,12 +133,6 @@ begin
     Writeln(bat, 'cls                                                                               ');
     Writeln(bat, 'SET disco=0                                                                       ');
     Writeln(bat, 'SET particao=1                                                                    ');
-    Writeln(bat, '>output.txt (                                                                     ');
-    Writeln(bat, 'echo PARTICIONAR HD                                                               ');
-    Writeln(bat, ')                                                                                 ');
-    Writeln(bat, '>>output.txt (                                                                    ');
-    Writeln(bat, 'echo criando SCRIPT                                                               ');
-    Writeln(bat, ')                                                                                 ');
     Writeln(bat, ':construction                                                                     ');
     Writeln(bat, 'if exist C:\scriptdisk.txt erase C:\scriptdisk.txt                                ');
     Writeln(bat, 'echo select disk %disco% > C:\scriptdisk.txt                                      ');
@@ -362,42 +355,6 @@ begin
 
     Result := True;
   end else
-    Result := False;
-end;
-
-function TFuncoes.ExecutarEsperarEnviar(NomeArquivo : String; mLog : TMemo) : Boolean;
-var
-  shell: TShellExecuteInfo;
-  codigoSaida: DWORD;
-begin
-  FillChar(shell, SizeOf(shell), 0) ;
-  shell.cbSize := SizeOf(TShellExecuteInfo) ;
-
-  with shell do
-  begin
-    fMask  := SEE_MASK_NOCLOSEPROCESS;
-    Wnd    := Application.Handle;
-    lpVerb := nil;
-    lpFile := PChar(NomeArquivo);
-    nShow  := SW_HIDE;
-  end;
-
-  if ShellExecuteEx(@shell) then
-  begin
-    repeat
-      if FileExists('C:\output.txt') then
-      begin
-        Sleep(500);
-        mLog.Lines.LoadFromFile('C:\output.txt');
-      end;
-
-      Application.ProcessMessages;
-      GetExitCodeProcess(shell.hProcess, codigoSaida);
-    until not(codigoSaida = STILL_ACTIVE);
-
-    Result := True;
-  end
-  else
     Result := False;
 end;
 
