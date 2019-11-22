@@ -29,9 +29,6 @@ object frmValidarCliente: TfrmValidarCliente
     Color = clMoneyGreen
     ParentBackground = False
     TabOrder = 0
-    ExplicitLeft = -28
-    ExplicitWidth = 449
-    ExplicitHeight = 216
     object imgVerificacao: TImage
       Left = 39
       Top = 64
@@ -377,7 +374,7 @@ object frmValidarCliente: TfrmValidarCliente
         NumbersOnly = True
         ParentCtl3D = False
         TabOrder = 0
-        Text = '632808380001004'
+        Text = '20999790000178'
         OnExit = edtCNPJExit
         OnKeyPress = edtCNPJKeyPress
       end
@@ -390,7 +387,7 @@ object frmValidarCliente: TfrmValidarCliente
         NumbersOnly = True
         ParentCtl3D = False
         TabOrder = 1
-        Text = '1582000'
+        Text = '547839'
       end
       object edtCPF: TEdit
         Left = 24
