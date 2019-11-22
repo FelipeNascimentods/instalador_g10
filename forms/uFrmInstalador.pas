@@ -76,13 +76,20 @@ end;
 
 procedure TfrmInstalador.instalar;
 begin
-  {cbxHD.Enabled := True;
+  btnInstalar.Enabled := false;
+  btnCancelar.Enabled := false;
+
+  EnableMenuItem(GetSystemMenu(handle, False ),SC_CLOSE, MF_BYCOMMAND or MF_GRAYED );
+
+  {cbxHD.Enabled := true;
   if funcoes.configurarHD(Memo) then
     cbxHD.Checked := True;}
 
-  {cbxProgramas.Enabled := True;
+  cbxProgramas.Enabled := true;
   funcoes.instalarProgramas(barraDeProgresso, Memo);
-  cbxProgramas.Checked := True;}
+  cbxProgramas.Checked := True;
+
+  EnableMenuItem(GetSystemMenu(handle, False ), SC_CLOSE, MF_BYCOMMAND or MF_ENABLED );
 end;
 
 procedure TfrmInstalador.btnCancelarClick(Sender: TObject);

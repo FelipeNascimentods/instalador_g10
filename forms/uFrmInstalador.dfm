@@ -36,7 +36,7 @@ object frmInstalador: TfrmInstalador
       Progress = 0
     end
     object btnInstalar: TSpeedButton
-      Left = 479
+      Left = 484
       Top = 14
       Width = 90
       Height = 28
@@ -85,6 +85,8 @@ object frmInstalador: TfrmInstalador
     Align = alClient
     ParentBackground = False
     TabOrder = 1
+    ExplicitLeft = 204
+    ExplicitTop = -6
     object Bevel: TBevel
       Left = 6
       Top = 52
@@ -125,8 +127,10 @@ object frmInstalador: TfrmInstalador
     Height = 447
     Align = alLeft
     Color = 1556970
+    Enabled = False
     ParentBackground = False
     TabOrder = 2
+    ExplicitTop = -6
     object Image1: TImage
       Left = 23
       Top = 14
@@ -379,9 +383,9 @@ object frmInstalador: TfrmInstalador
       Proportional = True
     end
     object cbxHD: TCheckBox
-      Left = 9
-      Top = 178
-      Width = 186
+      Left = 6
+      Top = 179
+      Width = 185
       Height = 17
       Caption = 'Criando Parti'#231#227'o G:\'
       Enabled = False
@@ -392,11 +396,12 @@ object frmInstalador: TfrmInstalador
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 0
+      StyleElements = [seClient, seBorder]
     end
     object cbxBanco: TCheckBox
-      Left = 9
-      Top = 201
-      Width = 186
+      Left = 6
+      Top = 202
+      Width = 185
       Height = 17
       Caption = 'Configurando Banco de Dados'
       Enabled = False
@@ -407,13 +412,14 @@ object frmInstalador: TfrmInstalador
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 1
+      StyleElements = [seClient, seBorder]
     end
     object cbxArquivo: TCheckBox
-      Left = 9
-      Top = 224
-      Width = 186
+      Left = 5
+      Top = 225
+      Width = 192
       Height = 17
-      Caption = 'Copiando Arquivos'
+      Caption = 'Copiando Arquivos do Sistema'
       Enabled = False
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -422,11 +428,12 @@ object frmInstalador: TfrmInstalador
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 2
+      StyleElements = [seClient, seBorder]
     end
     object cbxProgramas: TCheckBox
-      Left = 9
-      Top = 247
-      Width = 186
+      Left = 5
+      Top = 248
+      Width = 185
       Height = 17
       Caption = 'Instalando Programas Extras'
       Enabled = False
@@ -437,11 +444,12 @@ object frmInstalador: TfrmInstalador
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 3
+      StyleElements = [seClient, seBorder]
     end
     object cbxAtalho: TCheckBox
-      Left = 9
-      Top = 270
-      Width = 186
+      Left = 5
+      Top = 271
+      Width = 185
       Height = 17
       Caption = 'Criando Atalhos'
       Enabled = False
@@ -452,6 +460,7 @@ object frmInstalador: TfrmInstalador
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 4
+      StyleElements = [seClient, seBorder]
     end
   end
 end
